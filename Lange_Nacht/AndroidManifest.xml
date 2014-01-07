@@ -22,6 +22,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="de.htwg.lange_nacht.StrafeAnlegenActivity"
+            android:label="@string/title_activity_strafe_anlegen" >
+        </activity>
+        <activity
+            android:name="de.htwg.lange_nacht.StrafeEintragenActivity"
+            android:label="@string/title_activity_strafe_eintragen" >
+        </activity>
+        <activity
+            android:name="de.htwg.lange_nacht.SpielerAuswaehlenActivity"
+            android:label="@string/title_activity_spieler_auswaehlen" >
+        </activity>
     </application>
 
 </manifest>

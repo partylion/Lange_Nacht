@@ -4,5 +4,13 @@
     <string name="app_name">Lange_Nacht</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="strafe_eintragen">Strafe eintragen</string>
+    <string name="strafe_anlegen">Neue Strafe anlegen</string>
+    <string name="spieler_auswaehlen">Spieler auswählen</string>
+    <string name="title_activity_strafe_anlegen">Strafe anlegen</string>
+    <string name="title_activity_strafe_eintragen">Strafe eintragen</string>
+    <string name="strafe_auswaehlen">Strafe auswählen</string>
+    <string name="preis">€</string>
+    <string name="title_activity_spieler_auswaehlen">Spieler Auswählen</string>
 
 </resources>
