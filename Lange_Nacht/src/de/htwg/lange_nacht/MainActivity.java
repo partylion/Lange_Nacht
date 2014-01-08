@@ -10,52 +10,52 @@ import android.widget.Button;
 
 public class MainActivity extends Activity {
 
-	private Button btn_strafe_eintragen;
-	private Button btn_strafe_anlegen;
-	private Button btn_spieler_auswaehlen;
+	private Button btnStrafeEintragen;
+	private Button btnStrafeAnlegen;
+	private Button btnSpielerAuswaehlen;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		btn_strafe_eintragen = (Button) findViewById(R.id.btn_strafe_eintragen);
-		btn_strafe_anlegen = (Button) findViewById(R.id.btn_strafe_anlegen);
-		btn_spieler_auswaehlen = (Button) findViewById(R.id.btn_spieler_auswaehlen);
+		btnStrafeEintragen = (Button) findViewById(R.id.btnStrafeEintragen);
+		btnStrafeAnlegen = (Button) findViewById(R.id.btnStrafeAnlegen);
+		btnSpielerAuswaehlen = (Button) findViewById(R.id.btnSpielerAuswaehlen);
 
 		// Festlegen was beim Klick auf Strafe eintragen passiert
-		btn_strafe_eintragen.setOnClickListener(new OnClickListener() {
+		btnStrafeEintragen.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 
-				Intent geh_zu_strafe_eintragen = new Intent(MainActivity.this,
+				Intent geheZuStrafeEintragen = new Intent(MainActivity.this,
 						StrafeEintragenActivity.class);
-				startActivity(geh_zu_strafe_eintragen);
+				startActivity(geheZuStrafeEintragen);
 			}
 		});
 
 		// Festlegen was beim Klick auf Strafe anlegen passiert
-		btn_strafe_anlegen.setOnClickListener(new OnClickListener() {
+		btnStrafeAnlegen.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 
-				Intent geh_zu_strafe_anlegen = new Intent(MainActivity.this,
+				Intent geheZuStrafeAnlegen = new Intent(MainActivity.this,
 						StrafeAnlegenActivity.class);
-				startActivity(geh_zu_strafe_anlegen);
+				startActivity(geheZuStrafeAnlegen);
 			}
 		});
 
 		// Festlegen was beim Klick auf Spieler auswählen passiert
-		btn_spieler_auswaehlen.setOnClickListener(new OnClickListener() {
+		btnSpielerAuswaehlen.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 
-				Intent geh_zu_spieler_auswaehlen = new Intent(MainActivity.this,
+				Intent geheZuSpielerAuswaehlen = new Intent(MainActivity.this,
 						SpielerAuswaehlenActivity.class);
-				startActivity(geh_zu_spieler_auswaehlen);
+				startActivity(geheZuSpielerAuswaehlen);
 			}
 		});
 	}

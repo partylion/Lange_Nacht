@@ -9,31 +9,31 @@
     tools:context=".MainActivity" >
 
     <Button
-        android:id="@+id/btn_strafe_eintragen"
+        android:id="@+id/btnStrafeEintragen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/btn_strafe_anlegen"
+        android:layout_alignLeft="@+id/btnStrafeAnlegen"
         android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/btn_spieler_auswaehlen"
+        android:layout_alignRight="@+id/btnSpielerAuswaehlen"
         android:layout_marginTop="40dp"
         android:text="@string/strafe_eintragen" />
 
     <Button
-        android:id="@+id/btn_strafe_anlegen"
+        android:id="@+id/btnStrafeAnlegen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btn_strafe_eintragen"
+        android:layout_below="@+id/btnStrafeEintragen"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="60dp"
         android:text="@string/strafe_anlegen" />
 
     <Button
-        android:id="@+id/btn_spieler_auswaehlen"
+        android:id="@+id/btnSpielerAuswaehlen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/btn_strafe_anlegen"
-        android:layout_alignRight="@+id/btn_strafe_anlegen"
-        android:layout_below="@+id/btn_strafe_anlegen"
+        android:layout_alignLeft="@+id/btnStrafeAnlegen"
+        android:layout_alignRight="@+id/btnStrafeAnlegen"
+        android:layout_below="@+id/btnStrafeAnlegen"
         android:layout_marginTop="70dp"
         android:text="@string/spieler_auswaehlen" />
 
