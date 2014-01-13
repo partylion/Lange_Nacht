@@ -9,9 +9,8 @@ import android.widget.TextView;
 public class SpielerUebersicht extends Activity {
 	
 	private TextView txtViewSpielerName;
-	private String spielerName = getIntent().getExtras().getString("Spielername");
-//	private Strafenverwaltung strafenverwaltungsinstanz = Strafenverwaltung
-//			.getInstance();
+	private Strafenverwaltung strafenverwaltungsinstanz = Strafenverwaltung
+			.getInstance();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -19,11 +18,14 @@ public class SpielerUebersicht extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_spieler_uebersicht);
 		
+		String spielerName = getIntent().getExtras().getString("Spielername");
+		
 		txtViewSpielerName = (TextView) findViewById(R.id.txtViewSpielerName);
 		txtViewSpielerName.setText(spielerName);
+
 		
 		//TODO Information zum Spieler holen und übersichtlich darstellen
-//		strafenverwaltungsinstanz.getStrafenFor(spielerName);
+		strafenverwaltungsinstanz.getStrafenFor(spielerName);
 		
 	}
 
