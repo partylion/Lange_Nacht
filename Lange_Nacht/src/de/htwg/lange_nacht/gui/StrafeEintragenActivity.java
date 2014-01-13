@@ -11,16 +11,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import de.htwg.lange_nacht.R;
+import de.htwg.lange_nacht.business.Strafenverwaltung;
 
 public class StrafeEintragenActivity extends Activity {
 
 	private TextView txtViewPreis;
 	private Spinner spinnerSpieler;
 	private Spinner spinnerStrafen;
-	private String[] dummyBeschreibungen = { "Strafe auswählen", "Strafe1",
-			"Strafe2", "Strafe3", "Strafe4", "Strafe5" };
-	private String[] dummySpieler = { "Spieler auswählen", "Spieler1",
-			"Spieler2", "Spieler3", "Spieler4", "Spieler5" };
+	private Strafenverwaltung strafenverwaltungsinstanz = Strafenverwaltung
+			.getInstance();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +30,13 @@ public class StrafeEintragenActivity extends Activity {
 		spinnerSpieler = (Spinner) findViewById(R.id.spinnerSpieler);
 		spinnerStrafen = (Spinner) findViewById(R.id.spinnerStrafen);
 
-//		 String[] beschreibungen = Strafenverwaltung.getAllBeschreibungen();
-//		 String[] spieler = Strafenverwaltung.getAllSpieler();
+		String[] beschreibungen = strafenverwaltungsinstanz
+				.getAllBeschreibungen();
+		String[] spieler = strafenverwaltungsinstanz.getAllSpieler();
 
 		// Die beiden Spinner mit den Daten befüllen
 		ArrayAdapter<String> adapterStrafen = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, dummyBeschreibungen);
+				android.R.layout.simple_spinner_item, beschreibungen);
 		// Specify the layout to use when the list of choices appears
 		adapterStrafen
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -44,7 +44,7 @@ public class StrafeEintragenActivity extends Activity {
 		spinnerStrafen.setAdapter(adapterStrafen);
 
 		ArrayAdapter<String> adapterSpieler = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, dummySpieler);
+				android.R.layout.simple_spinner_item, spieler);
 		// Specify the layout to use when the list of choices appears
 		adapterSpieler
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -57,16 +57,16 @@ public class StrafeEintragenActivity extends Activity {
 			@Override
 			public void onItemSelected(AdapterView<?> parentView,
 					View selectedItemView, int position, long id) {
-				
+
 				String selectedItem = (String) spinnerStrafen.getSelectedItem();
-				
+
 				if (!(selectedItem.equals("Strafe auswählen"))) {
 					// TODO Verhalten beim Auswählen einer Strafe festlegen
 					txtViewPreis.setTextColor(Color.RED);
 					txtViewPreis.setText("25 €");
-					
-//					int preis = Strafenverwaltung.getPreisFor(selectedItem);
-//					txtViewPreis.setText(preis);
+
+					// int preis = Strafenverwaltung.getPreisFor(selectedItem);
+					// txtViewPreis.setText(preis);
 				}
 
 			}

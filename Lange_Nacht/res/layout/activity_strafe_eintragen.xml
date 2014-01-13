@@ -64,8 +64,7 @@
         android:id="@+id/spinnerStrafen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/txtViewStrafeAuswaehlen"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="false" />
+        android:layout_alignLeft="@+id/spinnerSpieler"
+        android:layout_centerVertical="true" />
 
 </RelativeLayout>
