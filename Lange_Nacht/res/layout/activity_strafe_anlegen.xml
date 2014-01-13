@@ -9,11 +9,48 @@
     tools:context=".StrafeAnlegenActivity" >
 
     <TextView
+        android:id="@+id/txtViewStrafeAnlegen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="23dp"
-        android:text="@string/hello_world" />
+        android:text="@string/strafe_anlegen"
+        android:textSize="@dimen/ueberschrift" />
+
+    <EditText
+        android:id="@+id/editTextStrafenName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtViewStrafeAnlegen"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="53dp"
+        android:ems="10"
+        android:hint="@string/beschreibung_eingeben" >
+
+        <requestFocus />
+        <requestFocus />
+
+    </EditText>
+
+    <EditText
+        android:id="@+id/editTextStrafePreis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:ems="10"
+        android:hint="@string/preis_eingeben"
+        android:inputType="number" >
+    </EditText>
+
+    <Button
+        android:id="@+id/btnStrafeAnlegenSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextStrafePreis"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="71dp"
+        android:text="@string/strafe_anlegen" />
 
 </RelativeLayout>

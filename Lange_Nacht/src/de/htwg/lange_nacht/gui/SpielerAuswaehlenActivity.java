@@ -1,16 +1,58 @@
 package de.htwg.lange_nacht.gui;
 
-import de.htwg.lange_nacht.R;
-import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
+import de.htwg.lange_nacht.R;
+import de.htwg.lange_nacht.SpielerUebersicht;
+import de.htwg.lange_nacht.business.Strafenverwaltung;
 
 public class SpielerAuswaehlenActivity extends Activity {
+
+	private Spinner spinnerSpielerAuswaehlen;
+	private Button btnSpielerAuswaehlenSubmit;
+	private Strafenverwaltung strafenverwaltungsinstanz = Strafenverwaltung
+			.getInstance();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_spieler_auswaehlen);
+
+		spinnerSpielerAuswaehlen = (Spinner) findViewById(R.id.spinnerSpielerAuswaehlen);
+		String[] spieler = strafenverwaltungsinstanz.getAllSpieler();
+
+		ArrayAdapter<String> adapterSpieler = new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item, spieler);
+		// Specify the layout to use when the list of choices appears
+		adapterSpieler
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		// Apply the adapter to the spinner
+		spinnerSpielerAuswaehlen.setAdapter(adapterSpieler);
+
+		btnSpielerAuswaehlenSubmit = (Button) findViewById(R.id.btnSpielerAuswaehlenSubmit);
+		
+				
+		// Festlegen was beim Klick auf Spieler auswählen passiert
+		btnSpielerAuswaehlenSubmit.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				
+				String spieler = (String) spinnerSpielerAuswaehlen.getSelectedItem();
+				Intent geheZuSpielerUebersicht = new Intent(SpielerAuswaehlenActivity.this,
+						SpielerUebersicht.class);
+				geheZuSpielerUebersicht.putExtra("Spielername", spieler);
+				startActivity(geheZuSpielerUebersicht);
+			}
+		});
+
 	}
 
 	@Override

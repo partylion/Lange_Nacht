@@ -34,6 +34,10 @@
             android:name="de.htwg.lange_nacht.gui.SpielerAuswaehlenActivity"
             android:label="@string/title_activity_spieler_auswaehlen" >
         </activity>
+        <activity
+            android:name="de.htwg.lange_nacht.SpielerUebersicht"
+            android:label="@string/title_activity_spieler_uebersicht" >
+        </activity>
     </application>
 
 </manifest>

@@ -1,5 +1,7 @@
 package de.htwg.lange_nacht.business;
 
+import de.htwg.lange_nacht.data.Strafe;
+
 
 
 public class Strafenverwaltung {
@@ -8,6 +10,17 @@ public class Strafenverwaltung {
 			"Strafe2", "Strafe3", "Strafe4", "Strafe5" };
 	private String[] dummySpieler = { "Spieler auswählen", "Spieler1",
 			"Spieler2", "Spieler3", "Spieler4", "Spieler5" };
+	
+	private Strafe[] dummyStrafenerzeugen(){
+		
+		Strafe strafe1 = new Strafe("Strafe1", 20);
+		Strafe strafe2 = new Strafe("Strafe2", 50);
+		Strafe strafe3 = new Strafe("Strafe1", 20);
+		
+		Strafe[] dummyStrafen = {strafe1, strafe2, strafe3};
+		
+		return dummyStrafen;
+	}
 	
 	protected Strafenverwaltung(){
 		
@@ -58,8 +71,13 @@ public class Strafenverwaltung {
 
 		int preis = 0;
 		
-		//TODO Loki einbauen
+		//TODO Logik einbauen
 		
 		return preis;
+	}
+	
+	public Strafe[] getStrafenFor(String spieler){
+		//TODO Strafen für Spieler aus Datenhaltung holen
+		return dummyStrafenerzeugen();
 	}
 }

@@ -12,5 +12,9 @@
     <string name="strafe_auswaehlen">Strafe auswählen</string>
     <string name="preis">€</string>
     <string name="title_activity_spieler_auswaehlen">Spieler Auswählen</string>
+    <string name="preis_eingeben">Preis eingeben</string>
+    <string name="beschreibung_eingeben">Beschreibung eingeben</string>
+    <string name="title_activity_spieler_uebersicht">SpielerUebersicht</string>
+    <string name="datum_eingeben">Datum eingeben</string>
 
 </resources>
