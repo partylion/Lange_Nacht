@@ -1,5 +1,6 @@
-package de.htwg.lange_nacht;
+package de.htwg.lange_nacht.gui;
 
+import de.htwg.lange_nacht.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;

@@ -37,17 +37,10 @@
         android:id="@+id/txtViewStrafeAuswaehlen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/txtViewStrafeEintragen"
         android:layout_below="@+id/spinnerSpieler"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="21dp"
         android:text="@string/strafe_auswaehlen" />
-
-    <Spinner
-        android:id="@+id/spinnerStrafen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/spinnerSpieler"
-        android:layout_centerVertical="true" />
 
     <TextView
         android:id="@+id/txtViewPreis"
@@ -66,5 +59,13 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="22dp"
         android:text="@string/strafe_eintragen" />
+
+    <Spinner
+        android:id="@+id/spinnerStrafen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtViewStrafeAuswaehlen"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="false" />
 
 </RelativeLayout>
