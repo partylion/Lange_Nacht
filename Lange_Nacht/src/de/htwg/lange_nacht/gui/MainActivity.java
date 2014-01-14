@@ -1,6 +1,5 @@
 package de.htwg.lange_nacht.gui;
 
-import de.htwg.lange_nacht.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,12 +7,15 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import de.htwg.lange_nacht.R;
+import de.htwg.lange_nacht.SpielerAnlegenActivity;
 
 public class MainActivity extends Activity {
 
 	private Button btnStrafeEintragen;
 	private Button btnStrafeAnlegen;
 	private Button btnSpielerAuswaehlen;
+	private Button btnSpielerAnlegen;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,18 @@ public class MainActivity extends Activity {
 				startActivity(geheZuSpielerAuswaehlen);
 			}
 		});
+		
+		// Festlegen was beim Klick auf Neuen Spieler anlegen passiert
+				btnSpielerAnlegen.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+
+						Intent geheZuSpielerAnlegen = new Intent(MainActivity.this,
+								SpielerAnlegenActivity.class);
+						startActivity(geheZuSpielerAnlegen);
+					}
+				});
 	}
 
 	@Override

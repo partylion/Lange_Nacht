@@ -16,5 +16,9 @@
     <string name="beschreibung_eingeben">Beschreibung eingeben</string>
     <string name="title_activity_spieler_uebersicht">SpielerUebersicht</string>
     <string name="datum_eingeben">Datum eingeben</string>
+    <string name="spieler_anlegen">Neuen Spieler anlegen</string>
+    <string name="title_activity_spieler_anlegen">SpielerAnlegenActivity</string>
+    <string name="nachname">Nachname</string>
+    <string name="vorname">Vorname</string>
 
 </resources>
