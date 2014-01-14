@@ -7,6 +7,7 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="18" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -39,7 +40,7 @@
             android:label="@string/title_activity_spieler_uebersicht" >
         </activity>
         <activity
-            android:name="de.htwg.lange_nacht.SpielerAnlegenActivity"
+            android:name="de.htwg.lange_nacht.gui.SpielerAnlegenActivity"
             android:label="@string/title_activity_spieler_anlegen" >
         </activity>
     </application>

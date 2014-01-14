@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import de.htwg.lange_nacht.R;
-import de.htwg.lange_nacht.SpielerAnlegenActivity;
 
 public class MainActivity extends Activity {
 
@@ -25,6 +24,7 @@ public class MainActivity extends Activity {
 		btnStrafeEintragen = (Button) findViewById(R.id.btnStrafeEintragen);
 		btnStrafeAnlegen = (Button) findViewById(R.id.btnStrafeAnlegen);
 		btnSpielerAuswaehlen = (Button) findViewById(R.id.btnSpielerAuswaehlen);
+		btnSpielerAnlegen = (Button) findViewById(R.id.btnSpielerAnlegen);
 
 		// Festlegen was beim Klick auf Strafe eintragen passiert
 		btnStrafeEintragen.setOnClickListener(new OnClickListener() {
@@ -63,7 +63,7 @@ public class MainActivity extends Activity {
 		});
 		
 		// Festlegen was beim Klick auf Neuen Spieler anlegen passiert
-				btnSpielerAnlegen.setOnClickListener(new OnClickListener() {
+		btnSpielerAnlegen.setOnClickListener(new OnClickListener() {
 
 					@Override
 					public void onClick(View v) {

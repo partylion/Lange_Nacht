@@ -1,14 +1,11 @@
 package de.htwg.lange_nacht.gui;
 
-import de.htwg.lange_nacht.R;
-import de.htwg.lange_nacht.R.id;
-import de.htwg.lange_nacht.R.layout;
-import de.htwg.lange_nacht.R.menu;
-import de.htwg.lange_nacht.business.Strafenverwaltung;
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.Menu;
 import android.widget.TextView;
+import de.htwg.lange_nacht.R;
+import de.htwg.lange_nacht.business.Strafenverwaltung;
 
 public class SpielerUebersicht extends Activity {
 	
