@@ -10,7 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import de.htwg.lange_nacht.R;
-import de.htwg.lange_nacht.SpielerUebersicht;
 import de.htwg.lange_nacht.business.Strafenverwaltung;
 
 public class SpielerAuswaehlenActivity extends Activity {
