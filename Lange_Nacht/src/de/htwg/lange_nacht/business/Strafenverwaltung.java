@@ -26,11 +26,6 @@ import de.htwg.lange_nacht.data.Strafe;
 public class Strafenverwaltung implements IStrafenverwaltung {
 
 	private String TAG = this.getClass().getSimpleName();
-	private String[] dummyBeschreibungen = { "Strafe auswählen", "Strafe1",
-			"Strafe2", "Strafe3", "Strafe4", "Strafe5" };
-
-	// private String[] dummySpieler = { "Spieler auswählen", "Spieler 1",
-	// "Spieler 2", "Spieler 3", "Spieler 4", "Spieler 5" };
 
 	private Strafe[] dummyStrafenerzeugen() {
 
@@ -93,9 +88,7 @@ public class Strafenverwaltung implements IStrafenverwaltung {
 				// Spieler-Objekten speichern
 
 				for (int i = 0; i < jsonArray.length(); i++) {
-					System.out.println("test");
 					JSONObject row = jsonArray.getJSONObject(i);
-					System.out.println("test2");
 					alleSpieler.add(new Spieler(row.getString("vorname"), row
 							.getString("nachname")));
 				}
@@ -116,12 +109,6 @@ public class Strafenverwaltung implements IStrafenverwaltung {
 
 		return alleSpieler;
 
-	}
-
-	@Override
-	public String[] getAllBeschreibungen() {
-		// TODO Logik implementieren
-		return dummyBeschreibungen;
 	}
 
 	@Override
@@ -178,6 +165,65 @@ public class Strafenverwaltung implements IStrafenverwaltung {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public ArrayList<Strafe> getAllStrafen() {
+
+		ArrayList<Strafe> alleStrafen = new ArrayList<Strafe>();
+		// PHP-Datei aufrufen
+		String url = "http://10.0.2.2/langenacht/getAllStrafen.php";
+		HttpClient httpclient = new DefaultHttpClient();
+		HttpGet httpget = new HttpGet(url);
+		HttpResponse response = null;
+		try {
+			response = httpclient.execute(httpget);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		// Aus Rückgabewert der PHP-Datei einen JSONArray bauen
+		JSONArray jsonArray = null;
+		String data = "";
+		StatusLine statusLine = response.getStatusLine();
+		int statusCode = statusLine.getStatusCode();
+		if (statusCode == 200) {
+			try {
+				BufferedReader br = new BufferedReader(new InputStreamReader(
+						response.getEntity().getContent()));
+				String line;
+				while ((line = br.readLine()) != null) {
+					data += line;
+				}
+
+				jsonArray = new JSONArray(data);
+
+				// Aus dem JSONArray die Spieler auslesen und als Arraylist von
+				// Spieler-Objekten speichern
+
+				for (int i = 0; i < jsonArray.length(); i++) {
+					System.out.println("test");
+					JSONObject row = jsonArray.getJSONObject(i);
+					System.out.println("test2");
+					alleStrafen.add(new Strafe(row.getString("beschreibung"),
+							Integer.parseInt(row.getString("preis"))));
+				}
+
+			} catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			Log.d(TAG, "Daten konnten nicht geladen werden");
+		}
+
+		return alleStrafen;
 	}
 
 }

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import de.htwg.lange_nacht.R;
 import de.htwg.lange_nacht.business.Strafenverwaltung;
 import de.htwg.lange_nacht.data.Spieler;
+import de.htwg.lange_nacht.data.Strafe;
 
 public class StrafeEintragenActivity extends Activity {
 
@@ -32,20 +33,25 @@ public class StrafeEintragenActivity extends Activity {
 		txtViewPreis = (TextView) findViewById(R.id.txtViewPreis);
 		spinnerSpieler = (Spinner) findViewById(R.id.spinnerSpieler);
 		spinnerStrafen = (Spinner) findViewById(R.id.spinnerStrafen);
-
-		String[] beschreibungen = strafenverwaltungsinstanz
-				.getAllBeschreibungen();
+		
+		final ArrayList<Strafe> alleStrafen = strafenverwaltungsinstanz.getAllStrafen();
 		ArrayList<Spieler> alleSpieler = strafenverwaltungsinstanz.getAllSpieler();
 		
-		String[] spielerliste = new String[alleSpieler.size()];
+		String[] spielerliste = new String[alleSpieler.size()+1];
+		spielerliste[0] = "Spieler auswählen";
+		for (int i = 1; i < spielerliste.length; i++) {
+			spielerliste[i]=alleSpieler.get(i-1).getVorname()+" "+alleSpieler.get(i-1).getNachname();
+		}
 		
-		for (int i = 0; i < spielerliste.length; i++) {
-			spielerliste[i]=alleSpieler.get(i).getVorname()+" "+alleSpieler.get(i).getNachname();
+		String[] strafenliste = new String[alleStrafen.size()+1];
+		strafenliste[0] = "Strafe auswählen";
+		for (int i = 1; i < strafenliste.length; i++) {
+			strafenliste[i]=alleStrafen.get(i-1).getBeschreibung();
 		}
 
 		// Die beiden Spinner mit den Daten befüllen
 		ArrayAdapter<String> adapterStrafen = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, beschreibungen);
+				android.R.layout.simple_spinner_item, strafenliste);
 		// Specify the layout to use when the list of choices appears
 		adapterStrafen
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -59,6 +65,8 @@ public class StrafeEintragenActivity extends Activity {
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		// Apply the adapter to the spinner
 		spinnerSpieler.setAdapter(adapterSpieler);
+		
+		txtViewPreis.setTextColor(Color.RED);
 
 		// Ändert den Inhalt von txtViewPreis entsprechend der ausgewählten
 		// Strafe
@@ -69,13 +77,19 @@ public class StrafeEintragenActivity extends Activity {
 
 				String selectedItem = (String) spinnerStrafen.getSelectedItem();
 
-				if (!(selectedItem.equals("Strafe auswählen"))) {
-					// TODO Verhalten beim Auswählen einer Strafe festlegen
-					txtViewPreis.setTextColor(Color.RED);
-					txtViewPreis.setText("25 €");
-
-					// int preis = Strafenverwaltung.getPreisFor(selectedItem);
-					// txtViewPreis.setText(preis);
+				if (selectedItem.equals("Strafe auswählen")) {
+					// TODO Verhalten beim Auswählen einer Strafe festlegen	
+					txtViewPreis.setText("");
+				} else {
+					int preis = 0;
+					for (int i = 0; i < alleStrafen.size(); i++) {
+						if(selectedItem.equals(alleStrafen.get(i).getBeschreibung())){
+							preis=alleStrafen.get(i).getPreis();
+						}
+					}
+					System.out.println("ich lebe noch");
+					txtViewPreis.setText(preis+" €");
+					System.out.println("ich lebe immer noch");
 				}
 
 			}
