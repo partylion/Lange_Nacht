@@ -36,10 +36,12 @@ public class SpielerAnlegenActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
+				String vorname = editTextVorname.getText().toString().trim();
+				String nachname = editTextNachname.getText().toString().trim();
 				
-				String url = "http://localhost/langenacht/insertSpieler.php?";
-				url = url + "vorname=" + editTextVorname.getText() + "&"
-						+ "nachname=" + editTextNachname.getText();
+				String url = "http://10.0.2.2/langenacht/insertSpieler.php?";
+				url = url + "vorname=" + vorname + "&"
+						+ "nachname=" + nachname;
 				
 				System.out.println(url);
 
