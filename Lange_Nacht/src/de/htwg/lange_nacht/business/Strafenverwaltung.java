@@ -80,17 +80,16 @@ public class Strafenverwaltung implements IStrafenverwaltung {
 				while ((line = br.readLine()) != null) {
 					data += line;
 				}
-				
-//				data = data.substring(data.indexOf("["), data.indexOf("]"));
-//				System.out.println(data);
+
 				jsonArray = new JSONArray(data);
 				
 				// Aus dem JSONArray die Spieler auslesen und als Arraylist von
 				// Spieler-Objekten speichern
 
 				for (int i = 0; i < jsonArray.length(); i++) {
+					System.out.println("test");
 					JSONObject row = jsonArray.getJSONObject(i);
-
+					System.out.println("test2");
 					alleSpieler.add(new Spieler(row.getString("vorname"), row
 							.getString("nachname")));
 				}
