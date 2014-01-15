@@ -4,12 +4,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,8 +28,9 @@ public class Strafenverwaltung implements IStrafenverwaltung {
 	private String TAG = this.getClass().getSimpleName();
 	private String[] dummyBeschreibungen = { "Strafe auswählen", "Strafe1",
 			"Strafe2", "Strafe3", "Strafe4", "Strafe5" };
-//	private String[] dummySpieler = { "Spieler auswählen", "Spieler 1",
-//			"Spieler 2", "Spieler 3", "Spieler 4", "Spieler 5" };
+
+	// private String[] dummySpieler = { "Spieler auswählen", "Spieler 1",
+	// "Spieler 2", "Spieler 3", "Spieler 4", "Spieler 5" };
 
 	private Strafe[] dummyStrafenerzeugen() {
 
@@ -82,7 +88,7 @@ public class Strafenverwaltung implements IStrafenverwaltung {
 				}
 
 				jsonArray = new JSONArray(data);
-				
+
 				// Aus dem JSONArray die Spieler auslesen und als Arraylist von
 				// Spieler-Objekten speichern
 
@@ -137,7 +143,33 @@ public class Strafenverwaltung implements IStrafenverwaltung {
 	@Override
 	public void spielerAnlegen(String vorname, String nachname) {
 		String url = "http://10.0.2.2/langenacht/insertSpieler.php?";
-		url = url + "vorname=" + vorname + "&" + "nachname=" + nachname;
+
+		List<NameValuePair> params = new LinkedList<NameValuePair>();
+		params.add(new BasicNameValuePair("vorname", vorname));
+		params.add(new BasicNameValuePair("nachname", nachname));
+
+		String paramString = URLEncodedUtils.format(params, "utf-8");
+		url += paramString;
+
+		HttpClient httpclient = new DefaultHttpClient();
+		HttpGet httpget = new HttpGet(url);
+		try {
+			httpclient.execute(httpget);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void strafeAnlegen(String beschreibung, String preis) {
+		String url = "http://10.0.2.2/langenacht/insertStrafe.php?";
+
+		List<NameValuePair> params = new LinkedList<NameValuePair>();
+		params.add(new BasicNameValuePair("beschreibung", beschreibung));
+		params.add(new BasicNameValuePair("preis", preis));
+
+		String paramString = URLEncodedUtils.format(params, "utf-8");
+		url += paramString;
 
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpGet httpget = new HttpGet(url);

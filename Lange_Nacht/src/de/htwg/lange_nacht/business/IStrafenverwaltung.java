@@ -45,4 +45,11 @@ public interface IStrafenverwaltung {
 	 * @param nachname
 	 */
 	public void spielerAnlegen(String vorname, String nachname);
+	
+	/**
+	 * Ruft eine PHP-Datei auf um eine neue Strafe mit den übergebenen Parametern anzulegen
+	 * @param beschreibung
+	 * @param preis
+	 */
+	public void strafeAnlegen(String beschreibung, String preis);
 }
