@@ -1,11 +1,5 @@
 package de.htwg.lange_nacht.gui;
 
-import java.io.IOException;
-
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,12 +9,14 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import de.htwg.lange_nacht.R;
+import de.htwg.lange_nacht.business.Strafenverwaltung;
 
 public class SpielerAnlegenActivity extends Activity {
 	
 	private Button btnSpielerAnlegenSubmit;
 	private EditText editTextNachname;
 	private EditText editTextVorname;
+	private Strafenverwaltung strafenverwaltunginstanz = Strafenverwaltung.getInstance();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,19 +35,7 @@ public class SpielerAnlegenActivity extends Activity {
 				String vorname = editTextVorname.getText().toString().trim();
 				String nachname = editTextNachname.getText().toString().trim();
 				
-				String url = "http://10.0.2.2/langenacht/insertSpieler.php?";
-				url = url + "vorname=" + vorname + "&"
-						+ "nachname=" + nachname;
-				
-				System.out.println(url);
-
-				HttpClient httpclient = new DefaultHttpClient();
-				HttpGet httpget = new HttpGet(url);
-				try {
-					httpclient.execute(httpget);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				strafenverwaltunginstanz.spielerAnlegen(vorname, nachname);
 				
 		        Intent geheZuMain = new Intent(SpielerAnlegenActivity.this,
 						MainActivity.class);

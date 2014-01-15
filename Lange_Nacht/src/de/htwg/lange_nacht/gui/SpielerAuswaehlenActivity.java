@@ -1,5 +1,7 @@
 package de.htwg.lange_nacht.gui;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import de.htwg.lange_nacht.R;
 import de.htwg.lange_nacht.business.Strafenverwaltung;
+import de.htwg.lange_nacht.data.Spieler;
 
 public class SpielerAuswaehlenActivity extends Activity {
 
@@ -25,10 +28,16 @@ public class SpielerAuswaehlenActivity extends Activity {
 		setContentView(R.layout.activity_spieler_auswaehlen);
 
 		spinnerSpielerAuswaehlen = (Spinner) findViewById(R.id.spinnerSpielerAuswaehlen);
-		String[] spieler = strafenverwaltungsinstanz.getAllSpieler();
+		ArrayList<Spieler> alleSpieler = strafenverwaltungsinstanz.getAllSpieler();
+		
+		String[] spielerliste = new String[alleSpieler.size()];
+		
+		for (int i = 0; i < spielerliste.length; i++) {
+			spielerliste[i]=alleSpieler.get(i).getVorname()+" "+alleSpieler.get(i).getNachname();
+		}
 
 		ArrayAdapter<String> adapterSpieler = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, spieler);
+				android.R.layout.simple_spinner_item, spielerliste);
 		// Specify the layout to use when the list of choices appears
 		adapterSpieler
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

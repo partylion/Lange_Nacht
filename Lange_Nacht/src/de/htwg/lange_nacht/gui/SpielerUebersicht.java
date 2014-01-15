@@ -23,10 +23,14 @@ public class SpielerUebersicht extends Activity {
 		
 		txtViewSpielerName = (TextView) findViewById(R.id.txtViewSpielerName);
 		txtViewSpielerName.setText(spielerName);
+		
+		String[] name = spielerName.split("\\s");
+		String vorname = name[0];
+		String nachname = name[1];
 
 		
 		//TODO Information zum Spieler holen und übersichtlich darstellen
-		strafenverwaltungsinstanz.getStrafenFor(spielerName);
+		strafenverwaltungsinstanz.getStrafenFor(vorname, nachname);
 		
 	}
 
