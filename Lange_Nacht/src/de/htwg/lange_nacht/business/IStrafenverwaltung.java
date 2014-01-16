@@ -1,7 +1,6 @@
 package de.htwg.lange_nacht.business;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import de.htwg.lange_nacht.data.Spieler;
 import de.htwg.lange_nacht.data.Strafe;
@@ -57,5 +56,5 @@ public interface IStrafenverwaltung {
 	 * @param spieler
 	 * @param strafe
 	 */
-	public void vergehenAnlegen(Spieler spieler, Strafe strafe, Date datum);
+	public void vergehenAnlegen(Spieler spieler, Strafe strafe, String datum);
 }

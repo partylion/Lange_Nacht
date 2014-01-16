@@ -20,5 +20,6 @@
     <string name="title_activity_spieler_anlegen">SpielerAnlegenActivity</string>
     <string name="nachname">Nachname</string>
     <string name="vorname">Vorname</string>
+    <string name="datum_waehlen">Datum auswählen</string>
 
 </resources>

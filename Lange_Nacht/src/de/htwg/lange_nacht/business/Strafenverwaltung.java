@@ -3,9 +3,7 @@ package de.htwg.lange_nacht.business;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -217,19 +215,13 @@ public class Strafenverwaltung implements IStrafenverwaltung {
 	}
 
 	@Override
-	public void vergehenAnlegen(Spieler spieler, Strafe strafe, Date datum) {
+	public void vergehenAnlegen(Spieler spieler, Strafe strafe, String datum) {
 		String url = "http://10.0.2.2/langenacht/insertVergehen.php?";
-
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd",
-				java.util.Locale.getDefault());
 
 		List<NameValuePair> params = new LinkedList<NameValuePair>();
 		params.add(new BasicNameValuePair("spielerID", spieler.getID()));
 		params.add(new BasicNameValuePair("strafenID", strafe.getID()));
-		params.add(new BasicNameValuePair("datum", simpleDateFormat
-				.format(datum)));
-		
-		System.out.println(simpleDateFormat.format(datum));
+		params.add(new BasicNameValuePair("datum", datum));
 
 		String paramString = URLEncodedUtils.format(params, "utf-8");
 		url += paramString;

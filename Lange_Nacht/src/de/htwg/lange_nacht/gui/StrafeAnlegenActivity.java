@@ -10,34 +10,40 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class StrafeAnlegenActivity extends Activity {
 
 	private Button btnStrafeAnlegenSubmit;
 	private EditText editTextBeschreibung;
 	private EditText editTextPreis;
-	private Strafenverwaltung strafenverwaltunginstanz = Strafenverwaltung.getInstance();
-	
+	private Strafenverwaltung strafenverwaltunginstanz = Strafenverwaltung
+			.getInstance();
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_strafe_anlegen);
-		
+
 		editTextBeschreibung = (EditText) findViewById(R.id.editTextStrafenName);
 		editTextPreis = (EditText) findViewById(R.id.editTextStrafePreis);
 		btnStrafeAnlegenSubmit = (Button) findViewById(R.id.btnStrafeAnlegenSubmit);
 
 		// Festlegen was beim Klick auf Neue Strafe anlegen passiert
 		btnStrafeAnlegenSubmit.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				String beschreibung = editTextBeschreibung.getText().toString().trim();
+				String beschreibung = editTextBeschreibung.getText().toString()
+						.trim();
 				String preis = editTextPreis.getText().toString().trim();
-				
+
 				strafenverwaltunginstanz.strafeAnlegen(beschreibung, preis);
-				
-		        Intent geheZuMain = new Intent(StrafeAnlegenActivity.this,
+
+				Toast.makeText(StrafeAnlegenActivity.this, "Strafe angelegt",
+						Toast.LENGTH_LONG).show();
+
+				Intent geheZuMain = new Intent(StrafeAnlegenActivity.this,
 						MainActivity.class);
 				startActivity(geheZuMain);
 			}

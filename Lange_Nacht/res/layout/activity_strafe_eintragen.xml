@@ -68,18 +68,13 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true" />
 
-    <EditText
-        android:id="@+id/editTextDate"
+    <Button
+        android:id="@+id/btnDatumwaehlen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/spinnerStrafen"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
-        android:ems="10"
-        android:hint="@string/datum_eingeben"
-        android:inputType="date" >
-
-        <requestFocus />
-    </EditText>
+        android:layout_marginTop="18dp"
+        android:text="@string/datum_waehlen" />
 
 </RelativeLayout>

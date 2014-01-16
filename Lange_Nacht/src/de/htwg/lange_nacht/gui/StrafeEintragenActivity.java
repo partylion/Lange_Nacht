@@ -1,12 +1,13 @@
 package de.htwg.lange_nacht.gui;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 
-import android.app.Activity;
+import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,14 +15,16 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import de.htwg.lange_nacht.R;
 import de.htwg.lange_nacht.business.Strafenverwaltung;
 import de.htwg.lange_nacht.data.Spieler;
 import de.htwg.lange_nacht.data.Strafe;
 
-public class StrafeEintragenActivity extends Activity {
+public class StrafeEintragenActivity extends FragmentActivity {
 
 	private TextView txtViewPreis;
 	private Spinner spinnerSpieler;
@@ -29,19 +32,23 @@ public class StrafeEintragenActivity extends Activity {
 	private Strafenverwaltung strafenverwaltungsinstanz = Strafenverwaltung
 			.getInstance();
 	private Button btnStrafeEintragenSubmit;
+	private Button btnDatumwaehlen;
+	private int selectedYear, selectedMonth, selectedDay;
 	private Strafenverwaltung strafenverwaltunginstanz = Strafenverwaltung
 			.getInstance();
-	private Date dummyDate = new java.util.Date();
+	static final int DATE_DIALOG_ID = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_strafe_eintragen);
 
+		// Referenzen holen
 		txtViewPreis = (TextView) findViewById(R.id.txtViewPreis);
 		spinnerSpieler = (Spinner) findViewById(R.id.spinnerSpieler);
 		spinnerStrafen = (Spinner) findViewById(R.id.spinnerStrafen);
 		btnStrafeEintragenSubmit = (Button) findViewById(R.id.btnStrafeEintragenSubmit);
+		btnDatumwaehlen = (Button) findViewById(R.id.btnDatumwaehlen);
 
 		final ArrayList<Strafe> alleStrafen = strafenverwaltungsinstanz
 				.getAllStrafen();
@@ -105,11 +112,14 @@ public class StrafeEintragenActivity extends Activity {
 
 		});
 
+		// Festlegen was beim klick auf Strafe Eintragen passiert
 		btnStrafeEintragenSubmit.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 
+				// Ausgewählte Elemente aus den Spinnern holen und die passende
+				// Strafe/Spieler dazu suchen
 				String selectedStrafe = (String) spinnerStrafen
 						.getSelectedItem();
 				String selectedSpieler = (String) spinnerSpieler
@@ -132,14 +142,66 @@ public class StrafeEintragenActivity extends Activity {
 					}
 				}
 
+				// Funktion der Strafenverwaltung aufrufen, die das Vergehen
+				// abspeichert
 				strafenverwaltunginstanz.vergehenAnlegen(spieler, strafe,
-						dummyDate);
+						selectedYear + "-" + selectedMonth + "-" + selectedDay);
 
+				// Benachrichtigung anzeigen
+				Toast.makeText(StrafeEintragenActivity.this,
+						"Strafe eingetragen", Toast.LENGTH_LONG).show();
+
+				// Zur MainActivity wechseln
 				Intent geheZuMain = new Intent(StrafeEintragenActivity.this,
 						MainActivity.class);
 				startActivity(geheZuMain);
 			}
 		});
+
+		// Wenn im DatePickerDialog ein Datum ausgewählt wurde wird hier ein
+		// Text erzeugt, der Text des btnDatumAuswaehlen geändert und die
+		// Auswahl in die dazugehörigen Variablen gespeichert
+		final OnDateSetListener ondate = new OnDateSetListener() {
+			@Override
+			public void onDateSet(DatePicker view, int year, int monthOfYear,
+					int dayOfMonth) {
+				Toast.makeText(
+						StrafeEintragenActivity.this,
+						String.valueOf(dayOfMonth) + "."
+								+ String.valueOf(monthOfYear + 1) + "."
+								+ String.valueOf(year), Toast.LENGTH_LONG)
+						.show();
+				selectedYear = year;
+				selectedMonth = monthOfYear + 1;
+				selectedDay = dayOfMonth;
+
+				btnDatumwaehlen.setText(selectedDay + "." + selectedMonth + "."
+						+ selectedYear);
+			}
+		};
+
+		// Festlegen was beim klick auf Datum Auswählen passiert
+		btnDatumwaehlen.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// DatePickerDialog anzeigen
+				DatePickerFragment date = new DatePickerFragment();
+
+				// aktuelles Datum setzten
+				Calendar calender = Calendar.getInstance();
+				Bundle args = new Bundle();
+				args.putInt("year", calender.get(Calendar.YEAR));
+				args.putInt("month", calender.get(Calendar.MONTH));
+				args.putInt("day", calender.get(Calendar.DAY_OF_MONTH));
+				date.setArguments(args);
+
+				// Callback um eingegebenes Datum zu sichern
+				date.setCallBack(ondate);
+				date.show(getSupportFragmentManager(), "Date Picker");
+			}
+		});
+
 	}
 
 	@Override
