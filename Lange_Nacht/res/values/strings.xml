@@ -21,5 +21,11 @@
     <string name="nachname">Nachname</string>
     <string name="vorname">Vorname</string>
     <string name="datum_waehlen">Datum auswählen</string>
+    <string name="title_activity_spieler_anzeigen">SpielerAnzeigenActivity</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="title_activity_alle_strafen">AlleStrafenActivity</string>
+    <string name="title_activity_offene_strafen">OffeneStrafenActivity</string>
 
 </resources>

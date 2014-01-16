@@ -7,7 +7,8 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="19" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -16,7 +17,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="de.htwg.lange_nacht.gui.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,23 +27,40 @@
         </activity>
         <activity
             android:name="de.htwg.lange_nacht.gui.StrafeAnlegenActivity"
-            android:label="@string/title_activity_strafe_anlegen" >
+            android:label="@string/title_activity_strafe_anlegen"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="de.htwg.lange_nacht.gui.StrafeEintragenActivity"
-            android:label="@string/title_activity_strafe_eintragen" >
+            android:label="@string/title_activity_strafe_eintragen"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="de.htwg.lange_nacht.gui.SpielerAuswaehlenActivity"
-            android:label="@string/title_activity_spieler_auswaehlen" >
+            android:label="@string/title_activity_spieler_auswaehlen"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="de.htwg.lange_nacht.gui.SpielerUebersicht"
-            android:label="@string/title_activity_spieler_uebersicht" >
+            android:label="@string/title_activity_spieler_uebersicht"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="de.htwg.lange_nacht.gui.SpielerAnlegenActivity"
-            android:label="@string/title_activity_spieler_anlegen" >
+            android:label="@string/title_activity_spieler_anlegen"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="de.htwg.lange_nacht.SpielerAnzeigenActivity"
+            android:label="@string/title_activity_spieler_anzeigen" >
+        </activity>
+        <activity
+            android:name="de.htwg.lange_nacht.gui.AlleStrafenActivity"
+            android:label="@string/title_activity_alle_strafen" >
+        </activity>
+        <activity
+            android:name="de.htwg.lange_nacht.gui.OffeneStrafenActivity"
+            android:label="@string/title_activity_offene_strafen" >
         </activity>
     </application>
 

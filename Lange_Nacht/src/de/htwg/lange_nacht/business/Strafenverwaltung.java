@@ -58,7 +58,7 @@ public class Strafenverwaltung implements IStrafenverwaltung {
 	public ArrayList<Spieler> getAllSpieler() {
 		ArrayList<Spieler> alleSpieler = new ArrayList<Spieler>();
 		// PHP-Datei aufrufen
-		String url = "http://10.0.2.2/langenacht/getAllSpieler.php";
+		String url = "http://37.49.36.97/langenacht/getAllSpieler.php";
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpGet httpget = new HttpGet(url);
 		HttpResponse response = null;
@@ -139,7 +139,7 @@ public class Strafenverwaltung implements IStrafenverwaltung {
 
 	@Override
 	public void strafeAnlegen(String beschreibung, String preis) {
-		String url = "http://10.0.2.2/langenacht/insertStrafe.php?";
+		String url = "http://37.49.36.97/langenacht/insertStrafe.php?";
 
 		List<NameValuePair> params = new LinkedList<NameValuePair>();
 		params.add(new BasicNameValuePair("beschreibung", beschreibung));
@@ -162,7 +162,7 @@ public class Strafenverwaltung implements IStrafenverwaltung {
 
 		ArrayList<Strafe> alleStrafen = new ArrayList<Strafe>();
 		// PHP-Datei aufrufen
-		String url = "http://10.0.2.2/langenacht/getAllStrafen.php";
+		String url = "http://37.49.36.97/langenacht/getAllStrafen.php";
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpGet httpget = new HttpGet(url);
 		HttpResponse response = null;

@@ -8,7 +8,7 @@ import de.htwg.lange_nacht.R;
 import de.htwg.lange_nacht.business.Strafenverwaltung;
 
 public class SpielerUebersicht extends Activity {
-	
+
 	private TextView txtViewSpielerName;
 	private Strafenverwaltung strafenverwaltungsinstanz = Strafenverwaltung
 			.getInstance();
@@ -18,20 +18,20 @@ public class SpielerUebersicht extends Activity {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_spieler_uebersicht);
-		
+
 		String spielerName = getIntent().getExtras().getString("Spielername");
-		
-		txtViewSpielerName = (TextView) findViewById(R.id.txtViewSpielerName);
-		txtViewSpielerName.setText(spielerName);
-		
+
+		 txtViewSpielerName = (TextView)
+		 findViewById(R.id.txtViewSpielerName);
+		 txtViewSpielerName.setText(spielerName);
+
 		String[] name = spielerName.split("\\s");
 		String vorname = name[0];
 		String nachname = name[1];
 
-		
-		//TODO Information zum Spieler holen und übersichtlich darstellen
+		// TODO Information zum Spieler holen und übersichtlich darstellen
 		strafenverwaltungsinstanz.getStrafenFor(vorname, nachname);
-		
+
 	}
 
 	@Override
