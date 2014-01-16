@@ -3,7 +3,9 @@ package de.htwg.lange_nacht.business;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -89,8 +91,8 @@ public class Strafenverwaltung implements IStrafenverwaltung {
 
 				for (int i = 0; i < jsonArray.length(); i++) {
 					JSONObject row = jsonArray.getJSONObject(i);
-					alleSpieler.add(new Spieler(row.getString("vorname"), row
-							.getString("nachname")));
+					alleSpieler.add(new Spieler(row.getString("idSpieler"), row
+							.getString("vorname"), row.getString("nachname")));
 				}
 
 			} catch (IllegalStateException e) {
@@ -109,16 +111,6 @@ public class Strafenverwaltung implements IStrafenverwaltung {
 
 		return alleSpieler;
 
-	}
-
-	@Override
-	public int getPreisFor(String beschreibung) {
-
-		int preis = 0;
-
-		// TODO Logik einbauen
-
-		return preis;
 	}
 
 	@Override
@@ -202,10 +194,8 @@ public class Strafenverwaltung implements IStrafenverwaltung {
 				// Spieler-Objekten speichern
 
 				for (int i = 0; i < jsonArray.length(); i++) {
-					System.out.println("test");
 					JSONObject row = jsonArray.getJSONObject(i);
-					System.out.println("test2");
-					alleStrafen.add(new Strafe(row.getString("beschreibung"),
+					alleStrafen.add(new Strafe(row.getString("strafenID"),row.getString("beschreibung"),
 							Integer.parseInt(row.getString("preis"))));
 				}
 
@@ -224,6 +214,35 @@ public class Strafenverwaltung implements IStrafenverwaltung {
 		}
 
 		return alleStrafen;
+	}
+
+	@Override
+	public void vergehenAnlegen(Spieler spieler, Strafe strafe, Date datum) {
+		String url = "http://10.0.2.2/langenacht/insertVergehen.php?";
+
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd",
+				java.util.Locale.getDefault());
+
+		List<NameValuePair> params = new LinkedList<NameValuePair>();
+		params.add(new BasicNameValuePair("spielerID", spieler.getID()));
+		params.add(new BasicNameValuePair("strafenID", strafe.getID()));
+		params.add(new BasicNameValuePair("datum", simpleDateFormat
+				.format(datum)));
+		
+		System.out.println(simpleDateFormat.format(datum));
+
+		String paramString = URLEncodedUtils.format(params, "utf-8");
+		url += paramString;
+		
+		System.out.println(url);
+
+		HttpClient httpclient = new DefaultHttpClient();
+		HttpGet httpget = new HttpGet(url);
+		try {
+			httpclient.execute(httpget);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

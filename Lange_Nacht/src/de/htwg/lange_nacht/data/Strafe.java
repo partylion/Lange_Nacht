@@ -4,10 +4,18 @@ public class Strafe {
 
 	private String beschreibung;
 	private int preis;
+	private String id;
 	
 	public Strafe(String beschreibung, int preis){
 		this.beschreibung=beschreibung;
 		this.preis=preis;
+	}
+
+	public Strafe(String id, String beschreibung, int preis) {
+		super();
+		this.beschreibung = beschreibung;
+		this.preis = preis;
+		this.id = id;
 	}
 	
 	public String getBeschreibung(){
@@ -18,4 +26,7 @@ public class Strafe {
 		return preis;
 	}
 	
+	public String getID() {
+		return id;
+	}	
 }

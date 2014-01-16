@@ -1,15 +1,19 @@
 package de.htwg.lange_nacht.gui;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import de.htwg.lange_nacht.R;
@@ -24,6 +28,10 @@ public class StrafeEintragenActivity extends Activity {
 	private Spinner spinnerStrafen;
 	private Strafenverwaltung strafenverwaltungsinstanz = Strafenverwaltung
 			.getInstance();
+	private Button btnStrafeEintragenSubmit;
+	private Strafenverwaltung strafenverwaltunginstanz = Strafenverwaltung
+			.getInstance();
+	private Date dummyDate = new java.util.Date();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,20 +41,22 @@ public class StrafeEintragenActivity extends Activity {
 		txtViewPreis = (TextView) findViewById(R.id.txtViewPreis);
 		spinnerSpieler = (Spinner) findViewById(R.id.spinnerSpieler);
 		spinnerStrafen = (Spinner) findViewById(R.id.spinnerStrafen);
-		
-		final ArrayList<Strafe> alleStrafen = strafenverwaltungsinstanz.getAllStrafen();
-		ArrayList<Spieler> alleSpieler = strafenverwaltungsinstanz.getAllSpieler();
-		
-		String[] spielerliste = new String[alleSpieler.size()+1];
-		spielerliste[0] = "Spieler auswählen";
-		for (int i = 1; i < spielerliste.length; i++) {
-			spielerliste[i]=alleSpieler.get(i-1).getVorname()+" "+alleSpieler.get(i-1).getNachname();
+		btnStrafeEintragenSubmit = (Button) findViewById(R.id.btnStrafeEintragenSubmit);
+
+		final ArrayList<Strafe> alleStrafen = strafenverwaltungsinstanz
+				.getAllStrafen();
+		final ArrayList<Spieler> alleSpieler = strafenverwaltungsinstanz
+				.getAllSpieler();
+
+		String[] spielerliste = new String[alleSpieler.size()];
+		for (int i = 0; i < spielerliste.length; i++) {
+			spielerliste[i] = alleSpieler.get(i).getVorname() + " "
+					+ alleSpieler.get(i).getNachname();
 		}
-		
-		String[] strafenliste = new String[alleStrafen.size()+1];
-		strafenliste[0] = "Strafe auswählen";
-		for (int i = 1; i < strafenliste.length; i++) {
-			strafenliste[i]=alleStrafen.get(i-1).getBeschreibung();
+
+		String[] strafenliste = new String[alleStrafen.size()];
+		for (int i = 0; i < strafenliste.length; i++) {
+			strafenliste[i] = alleStrafen.get(i).getBeschreibung();
 		}
 
 		// Die beiden Spinner mit den Daten befüllen
@@ -65,7 +75,7 @@ public class StrafeEintragenActivity extends Activity {
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		// Apply the adapter to the spinner
 		spinnerSpieler.setAdapter(adapterSpieler);
-		
+
 		txtViewPreis.setTextColor(Color.RED);
 
 		// Ändert den Inhalt von txtViewPreis entsprechend der ausgewählten
@@ -77,20 +87,14 @@ public class StrafeEintragenActivity extends Activity {
 
 				String selectedItem = (String) spinnerStrafen.getSelectedItem();
 
-				if (selectedItem.equals("Strafe auswählen")) {
-					// TODO Verhalten beim Auswählen einer Strafe festlegen	
-					txtViewPreis.setText("");
-				} else {
-					int preis = 0;
-					for (int i = 0; i < alleStrafen.size(); i++) {
-						if(selectedItem.equals(alleStrafen.get(i).getBeschreibung())){
-							preis=alleStrafen.get(i).getPreis();
-						}
+				int preis = 0;
+				for (int i = 0; i < alleStrafen.size(); i++) {
+					if (selectedItem.equals(alleStrafen.get(i)
+							.getBeschreibung())) {
+						preis = alleStrafen.get(i).getPreis();
 					}
-					System.out.println("ich lebe noch");
-					txtViewPreis.setText(preis+" €");
-					System.out.println("ich lebe immer noch");
 				}
+				txtViewPreis.setText(preis + " €");
 
 			}
 
@@ -99,6 +103,42 @@ public class StrafeEintragenActivity extends Activity {
 				// your code here
 			}
 
+		});
+
+		btnStrafeEintragenSubmit.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				String selectedStrafe = (String) spinnerStrafen
+						.getSelectedItem();
+				String selectedSpieler = (String) spinnerSpieler
+						.getSelectedItem();
+
+				Spieler spieler = null;
+				Strafe strafe = null;
+
+				for (int i = 0; i < alleStrafen.size(); i++) {
+					if (selectedStrafe.equals(alleStrafen.get(i)
+							.getBeschreibung())) {
+						strafe = alleStrafen.get(i);
+					}
+				}
+
+				for (int i = 0; i < alleSpieler.size(); i++) {
+					if (selectedSpieler.equals(alleSpieler.get(i).getVorname()
+							+ " " + alleSpieler.get(i).getNachname())) {
+						spieler = alleSpieler.get(i);
+					}
+				}
+
+				strafenverwaltunginstanz.vergehenAnlegen(spieler, strafe,
+						dummyDate);
+
+				Intent geheZuMain = new Intent(StrafeEintragenActivity.this,
+						MainActivity.class);
+				startActivity(geheZuMain);
+			}
 		});
 	}
 

@@ -1,6 +1,7 @@
 package de.htwg.lange_nacht.business;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import de.htwg.lange_nacht.data.Spieler;
 import de.htwg.lange_nacht.data.Strafe;
@@ -14,16 +15,6 @@ public interface IStrafenverwaltung {
 	 * @return ein String Array mit allen Spielern
 	 */
 	public ArrayList<Spieler> getAllSpieler();
-
-
-	/**
-	 * Holt sich von der Datenhaltung den entsprechenden Preis zu der Strafe mit
-	 * der übergebenen Beschreibung und gibt diesen int_wert zurück
-	 * 
-	 * @param beschreibung
-	 * @return ein int-Wert mit dem Preis zur Strafe
-	 */
-	public int getPreisFor(String beschreibung);
 
 	/**
 	 * Gibt alle Strafen für den übergebenen Spieler zurück
@@ -58,4 +49,13 @@ public interface IStrafenverwaltung {
 	 * @return eine Arraylist mit allen Strafen
 	 */
 	public ArrayList<Strafe> getAllStrafen();
+	
+	/**
+	 * Ruft eine PHP-Datei auf um ein neues Vergehen mit den übergebenen
+	 * Parametern anzulegen
+	 * 
+	 * @param spieler
+	 * @param strafe
+	 */
+	public void vergehenAnlegen(Spieler spieler, Strafe strafe, Date datum);
 }
