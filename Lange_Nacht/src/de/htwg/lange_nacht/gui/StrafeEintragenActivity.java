@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import de.htwg.lange_nacht.R;
 import de.htwg.lange_nacht.business.Strafenverwaltung;
+import de.htwg.lange_nacht.data.Messages;
 import de.htwg.lange_nacht.data.Spieler;
 import de.htwg.lange_nacht.data.Strafe;
 
@@ -49,7 +50,7 @@ public class StrafeEintragenActivity extends FragmentActivity {
 	private Handler handler = new Handler() {
 		public void handleMessage(Message message) {
 			Object list = message.obj;
-			if (message.arg1 == RESULT_OK && list != null && message.arg2 == 1) {
+			if (message.arg1 == RESULT_OK && list != null && message.arg2 == Messages.GET_SPIELER) {
 				ArrayList<Spieler> alleSpieler = (ArrayList<Spieler>) list;
 				adapterSpieler.clear();
 				spielerListe = new Spieler[alleSpieler.size()];
@@ -60,7 +61,7 @@ public class StrafeEintragenActivity extends FragmentActivity {
 				}
 				adapterSpieler.notifyDataSetChanged();
 			} else if (message.arg1 == RESULT_OK && list != null
-					&& message.arg2 == 2) {
+					&& message.arg2 == Messages.GET_STRAFEN) {
 				ArrayList<Strafe> alleStrafen = (ArrayList<Strafe>) list;
 				adapterStrafen.clear();
 				strafenListe = new Strafe[alleStrafen.size()];
@@ -70,7 +71,7 @@ public class StrafeEintragenActivity extends FragmentActivity {
 				}
 				adapterStrafen.notifyDataSetChanged();
 			}
-			else if (message.arg1 == RESULT_OK && message.arg2 == 3) {
+			else if (message.arg1 == RESULT_OK && message.arg2 == Messages.SET_VERGEHEN) {
 				Toast.makeText(StrafeEintragenActivity.this,
 						"Eintrag erfolgreich", Toast.LENGTH_LONG).show();
 			}
@@ -78,8 +79,6 @@ public class StrafeEintragenActivity extends FragmentActivity {
 			else {
 				Toast.makeText(StrafeEintragenActivity.this,
 						"Download failed.", Toast.LENGTH_LONG).show();
-				System.out.println(message.arg1);
-				System.out.println(message.arg2);
 			}
 		};
 	};

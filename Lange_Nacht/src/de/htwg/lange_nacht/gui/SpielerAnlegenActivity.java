@@ -1,8 +1,12 @@
 package de.htwg.lange_nacht.gui;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Messenger;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -11,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import de.htwg.lange_nacht.R;
 import de.htwg.lange_nacht.business.Strafenverwaltung;
+import de.htwg.lange_nacht.data.Messages;
 
 public class SpielerAnlegenActivity extends Activity {
 
@@ -19,6 +24,20 @@ public class SpielerAnlegenActivity extends Activity {
 	private EditText editTextVorname;
 	private Strafenverwaltung strafenverwaltunginstanz = Strafenverwaltung
 			.getInstance();
+	
+	
+	@SuppressLint("HandlerLeak")
+	private Handler handler = new Handler() {
+		public void handleMessage(Message message) {
+			if (message.arg1 == RESULT_OK && message.arg2 == Messages.SET_SPIELER) {
+				Toast.makeText(SpielerAnlegenActivity.this, "Spieler angelegt", Toast.LENGTH_LONG).show();
+			} 
+			else {
+				Toast.makeText(SpielerAnlegenActivity.this,
+						"Upload failed.", Toast.LENGTH_LONG).show();
+			}
+		};
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +56,7 @@ public class SpielerAnlegenActivity extends Activity {
 				String vorname = editTextVorname.getText().toString().trim();
 				String nachname = editTextNachname.getText().toString().trim();
 
-				strafenverwaltunginstanz.spielerAnlegen(vorname, nachname);
-
-				Toast.makeText(SpielerAnlegenActivity.this, "Spieler angelegt",
-						Toast.LENGTH_LONG).show();
+				strafenverwaltunginstanz.spielerAnlegen(new Messenger(handler), vorname, nachname);
 
 				Intent geheZuMain = new Intent(SpielerAnlegenActivity.this,
 						MainActivity.class);

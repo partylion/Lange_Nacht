@@ -2,7 +2,12 @@ package de.htwg.lange_nacht.gui;
 
 import de.htwg.lange_nacht.R;
 import de.htwg.lange_nacht.business.Strafenverwaltung;
+import de.htwg.lange_nacht.data.Messages;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Messenger;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
@@ -19,6 +24,19 @@ public class StrafeAnlegenActivity extends Activity {
 	private EditText editTextPreis;
 	private Strafenverwaltung strafenverwaltunginstanz = Strafenverwaltung
 			.getInstance();
+	
+	@SuppressLint("HandlerLeak")
+	private Handler handler = new Handler() {
+		public void handleMessage(Message message) {
+			if (message.arg1 == RESULT_OK && message.arg2 == Messages.SET_STRAFE) {
+				Toast.makeText(StrafeAnlegenActivity.this, "Strafe angelegt", Toast.LENGTH_LONG).show();
+			} 
+			else {
+				Toast.makeText(StrafeAnlegenActivity.this,
+						"Upload failed.", Toast.LENGTH_LONG).show();
+			}
+		};
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +56,7 @@ public class StrafeAnlegenActivity extends Activity {
 						.trim();
 				String preis = editTextPreis.getText().toString().trim();
 
-				strafenverwaltunginstanz.strafeAnlegen(beschreibung, preis);
-
-				Toast.makeText(StrafeAnlegenActivity.this, "Strafe angelegt",
-						Toast.LENGTH_LONG).show();
+				strafenverwaltunginstanz.strafeAnlegen(new Messenger(handler), beschreibung, preis);
 
 				Intent geheZuMain = new Intent(StrafeAnlegenActivity.this,
 						MainActivity.class);

@@ -4,17 +4,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,10 +53,8 @@ public class Strafenverwaltung implements IStrafenverwaltung {
 
 	@Override
 	public void getAllSpielerAndStrafen(Context context, Messenger messenger) {
-
-		//Call AsyncTask
+		// Call AsyncTask
 		new AsyncTaskAlleSpielerUndStrafen(context, messenger).execute();
-//		new AsyncTaskAlleSpieler(context, messenger).execute();
 	}
 
 	@Override
@@ -71,43 +64,18 @@ public class Strafenverwaltung implements IStrafenverwaltung {
 	}
 
 	@Override
-	public void spielerAnlegen(String vorname, String nachname) {
-		String url = "http://10.0.2.2/langenacht/insertSpieler.php?";
+	public void spielerAnlegen(Messenger messenger, String vorname,
+			String nachname) {
 
-		List<NameValuePair> params = new LinkedList<NameValuePair>();
-		params.add(new BasicNameValuePair("vorname", vorname));
-		params.add(new BasicNameValuePair("nachname", nachname));
+		new AsyncTaskSpielerAnlegen(messenger, vorname, nachname).execute();
 
-		String paramString = URLEncodedUtils.format(params, "utf-8");
-		url += paramString;
-
-		HttpClient httpclient = new DefaultHttpClient();
-		HttpGet httpget = new HttpGet(url);
-		try {
-			httpclient.execute(httpget);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	@Override
-	public void strafeAnlegen(String beschreibung, String preis) {
-		String url = "http://37.49.36.97/langenacht/insertStrafe.php?";
+	public void strafeAnlegen(Messenger messenger, String beschreibung,
+			String preis) {
 
-		List<NameValuePair> params = new LinkedList<NameValuePair>();
-		params.add(new BasicNameValuePair("beschreibung", beschreibung));
-		params.add(new BasicNameValuePair("preis", preis));
-
-		String paramString = URLEncodedUtils.format(params, "utf-8");
-		url += paramString;
-
-		HttpClient httpclient = new DefaultHttpClient();
-		HttpGet httpget = new HttpGet(url);
-		try {
-			httpclient.execute(httpget);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		new AsyncTaskStrafeAnlegen(messenger, beschreibung, preis).execute();
 	}
 
 	@Override
@@ -169,8 +137,15 @@ public class Strafenverwaltung implements IStrafenverwaltung {
 	}
 
 	@Override
-	public void vergehenAnlegen(Messenger messenger, Spieler spieler, Strafe strafe, String datum) {
-		new AsyncTaskVergehenAnlegen(messenger, spieler, strafe, datum).execute();
+	public void vergehenAnlegen(Messenger messenger, Spieler spieler,
+			Strafe strafe, String datum) {
+		new AsyncTaskVergehenAnlegen(messenger, spieler, strafe, datum)
+				.execute();
+	}
+
+	@Override
+	public void getAllSpieler(Context context, Messenger messenger) {
+		new AsyncTaskAlleSpieler(context, messenger).execute();
 	}
 
 }
