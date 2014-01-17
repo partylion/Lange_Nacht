@@ -19,6 +19,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
+import android.os.Messenger;
 import android.util.Log;
 import de.htwg.lange_nacht.data.Spieler;
 import de.htwg.lange_nacht.data.Strafe;
@@ -55,60 +57,11 @@ public class Strafenverwaltung implements IStrafenverwaltung {
 	}
 
 	@Override
-	public ArrayList<Spieler> getAllSpieler() {
-		ArrayList<Spieler> alleSpieler = new ArrayList<Spieler>();
-		// PHP-Datei aufrufen
-		String url = "http://37.49.36.97/langenacht/getAllSpieler.php";
-		HttpClient httpclient = new DefaultHttpClient();
-		HttpGet httpget = new HttpGet(url);
-		HttpResponse response = null;
-		try {
-			response = httpclient.execute(httpget);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public void getAllSpielerAndStrafen(Context context, Messenger messenger) {
 
-		// Aus Rückgabewert der PHP-Datei einen JSONArray bauen
-		JSONArray jsonArray = null;
-		String data = "";
-		StatusLine statusLine = response.getStatusLine();
-		int statusCode = statusLine.getStatusCode();
-		if (statusCode == 200) {
-			try {
-				BufferedReader br = new BufferedReader(new InputStreamReader(
-						response.getEntity().getContent()));
-				String line;
-				while ((line = br.readLine()) != null) {
-					data += line;
-				}
-
-				jsonArray = new JSONArray(data);
-
-				// Aus dem JSONArray die Spieler auslesen und als Arraylist von
-				// Spieler-Objekten speichern
-
-				for (int i = 0; i < jsonArray.length(); i++) {
-					JSONObject row = jsonArray.getJSONObject(i);
-					alleSpieler.add(new Spieler(row.getString("idSpieler"), row
-							.getString("vorname"), row.getString("nachname")));
-				}
-
-			} catch (IllegalStateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} else {
-			Log.d(TAG, "Daten konnten nicht geladen werden");
-		}
-
-		return alleSpieler;
-
+		//Call AsyncTask
+		new AsyncTaskAlleSpielerUndStrafen(context, messenger).execute();
+//		new AsyncTaskAlleSpieler(context, messenger).execute();
 	}
 
 	@Override
@@ -193,8 +146,9 @@ public class Strafenverwaltung implements IStrafenverwaltung {
 
 				for (int i = 0; i < jsonArray.length(); i++) {
 					JSONObject row = jsonArray.getJSONObject(i);
-					alleStrafen.add(new Strafe(row.getString("strafenID"),row.getString("beschreibung"),
-							Integer.parseInt(row.getString("preis"))));
+					alleStrafen.add(new Strafe(row.getString("strafenID"), row
+							.getString("beschreibung"), Integer.parseInt(row
+							.getString("preis"))));
 				}
 
 			} catch (IllegalStateException e) {
@@ -215,26 +169,8 @@ public class Strafenverwaltung implements IStrafenverwaltung {
 	}
 
 	@Override
-	public void vergehenAnlegen(Spieler spieler, Strafe strafe, String datum) {
-		String url = "http://10.0.2.2/langenacht/insertVergehen.php?";
-
-		List<NameValuePair> params = new LinkedList<NameValuePair>();
-		params.add(new BasicNameValuePair("spielerID", spieler.getID()));
-		params.add(new BasicNameValuePair("strafenID", strafe.getID()));
-		params.add(new BasicNameValuePair("datum", datum));
-
-		String paramString = URLEncodedUtils.format(params, "utf-8");
-		url += paramString;
-		
-		System.out.println(url);
-
-		HttpClient httpclient = new DefaultHttpClient();
-		HttpGet httpget = new HttpGet(url);
-		try {
-			httpclient.execute(httpget);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public void vergehenAnlegen(Messenger messenger, Spieler spieler, Strafe strafe, String datum) {
+		new AsyncTaskVergehenAnlegen(messenger, spieler, strafe, datum).execute();
 	}
 
 }

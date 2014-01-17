@@ -2,6 +2,8 @@ package de.htwg.lange_nacht.business;
 
 import java.util.ArrayList;
 
+import android.content.Context;
+import android.os.Messenger;
 import de.htwg.lange_nacht.data.Spieler;
 import de.htwg.lange_nacht.data.Strafe;
 
@@ -13,7 +15,7 @@ public interface IStrafenverwaltung {
 	 * 
 	 * @return ein String Array mit allen Spielern
 	 */
-	public ArrayList<Spieler> getAllSpieler();
+	public void getAllSpielerAndStrafen(Context context, Messenger messenger);
 
 	/**
 	 * Gibt alle Strafen für den übergebenen Spieler zurück
@@ -56,5 +58,5 @@ public interface IStrafenverwaltung {
 	 * @param spieler
 	 * @param strafe
 	 */
-	public void vergehenAnlegen(Spieler spieler, Strafe strafe, String datum);
+	public void vergehenAnlegen(Messenger messenger, Spieler spieler, Strafe strafe, String datum);
 }

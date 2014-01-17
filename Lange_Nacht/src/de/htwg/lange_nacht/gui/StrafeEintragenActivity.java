@@ -3,10 +3,14 @@ package de.htwg.lange_nacht.gui;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Messenger;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.View;
@@ -24,6 +28,7 @@ import de.htwg.lange_nacht.business.Strafenverwaltung;
 import de.htwg.lange_nacht.data.Spieler;
 import de.htwg.lange_nacht.data.Strafe;
 
+@SuppressLint("HandlerLeak")
 public class StrafeEintragenActivity extends FragmentActivity {
 
 	private TextView txtViewPreis;
@@ -34,9 +39,50 @@ public class StrafeEintragenActivity extends FragmentActivity {
 	private Button btnStrafeEintragenSubmit;
 	private Button btnDatumwaehlen;
 	private int selectedYear, selectedMonth, selectedDay;
-	private Strafenverwaltung strafenverwaltunginstanz = Strafenverwaltung
-			.getInstance();
 	static final int DATE_DIALOG_ID = 0;
+
+	private ArrayAdapter<String> adapterSpieler;
+	private Spieler[] spielerListe;
+	private ArrayAdapter<String> adapterStrafen;
+	private Strafe[] strafenListe;
+
+	private Handler handler = new Handler() {
+		public void handleMessage(Message message) {
+			Object list = message.obj;
+			if (message.arg1 == RESULT_OK && list != null && message.arg2 == 1) {
+				ArrayList<Spieler> alleSpieler = (ArrayList<Spieler>) list;
+				adapterSpieler.clear();
+				spielerListe = new Spieler[alleSpieler.size()];
+				for (int i = 0; i < alleSpieler.size(); i++) {
+					spielerListe[i] = alleSpieler.get(i);
+					adapterSpieler.add(alleSpieler.get(i).getVorname() + " "
+							+ alleSpieler.get(i).getNachname());
+				}
+				adapterSpieler.notifyDataSetChanged();
+			} else if (message.arg1 == RESULT_OK && list != null
+					&& message.arg2 == 2) {
+				ArrayList<Strafe> alleStrafen = (ArrayList<Strafe>) list;
+				adapterStrafen.clear();
+				strafenListe = new Strafe[alleStrafen.size()];
+				for (int i = 0; i < alleStrafen.size(); i++) {
+					strafenListe[i] = alleStrafen.get(i);
+					adapterStrafen.add(alleStrafen.get(i).getBeschreibung());
+				}
+				adapterStrafen.notifyDataSetChanged();
+			}
+			else if (message.arg1 == RESULT_OK && message.arg2 == 3) {
+				Toast.makeText(StrafeEintragenActivity.this,
+						"Eintrag erfolgreich", Toast.LENGTH_LONG).show();
+			}
+
+			else {
+				Toast.makeText(StrafeEintragenActivity.this,
+						"Download failed.", Toast.LENGTH_LONG).show();
+				System.out.println(message.arg1);
+				System.out.println(message.arg2);
+			}
+		};
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,34 +96,19 @@ public class StrafeEintragenActivity extends FragmentActivity {
 		btnStrafeEintragenSubmit = (Button) findViewById(R.id.btnStrafeEintragenSubmit);
 		btnDatumwaehlen = (Button) findViewById(R.id.btnDatumwaehlen);
 
-		final ArrayList<Strafe> alleStrafen = strafenverwaltungsinstanz
-				.getAllStrafen();
-		final ArrayList<Spieler> alleSpieler = strafenverwaltungsinstanz
-				.getAllSpieler();
-
-		String[] spielerliste = new String[alleSpieler.size()];
-		for (int i = 0; i < spielerliste.length; i++) {
-			spielerliste[i] = alleSpieler.get(i).getVorname() + " "
-					+ alleSpieler.get(i).getNachname();
-		}
-
-		String[] strafenliste = new String[alleStrafen.size()];
-		for (int i = 0; i < strafenliste.length; i++) {
-			strafenliste[i] = alleStrafen.get(i).getBeschreibung();
-		}
+		strafenverwaltungsinstanz.getAllSpielerAndStrafen(this, new Messenger(handler));
 
 		// Die beiden Spinner mit den Daten befüllen
-		ArrayAdapter<String> adapterStrafen = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, strafenliste);
 		// Specify the layout to use when the list of choices appears
+		adapterStrafen = new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item);
 		adapterStrafen
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		// Apply the adapter to the spinner
 		spinnerStrafen.setAdapter(adapterStrafen);
-
-		ArrayAdapter<String> adapterSpieler = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, spielerliste);
 		// Specify the layout to use when the list of choices appears
+		adapterSpieler = new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item);
 		adapterSpieler
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		// Apply the adapter to the spinner
@@ -95,10 +126,9 @@ public class StrafeEintragenActivity extends FragmentActivity {
 				String selectedItem = (String) spinnerStrafen.getSelectedItem();
 
 				int preis = 0;
-				for (int i = 0; i < alleStrafen.size(); i++) {
-					if (selectedItem.equals(alleStrafen.get(i)
-							.getBeschreibung())) {
-						preis = alleStrafen.get(i).getPreis();
+				for (int i = 0; i < strafenListe.length; i++) {
+					if (selectedItem.equals(strafenListe[i].getBeschreibung())) {
+						preis = strafenListe[i].getPreis();
 					}
 				}
 				txtViewPreis.setText(preis + " €");
@@ -128,28 +158,23 @@ public class StrafeEintragenActivity extends FragmentActivity {
 				Spieler spieler = null;
 				Strafe strafe = null;
 
-				for (int i = 0; i < alleStrafen.size(); i++) {
-					if (selectedStrafe.equals(alleStrafen.get(i)
-							.getBeschreibung())) {
-						strafe = alleStrafen.get(i);
+				for (int i = 0; i < strafenListe.length; i++) {
+					if (selectedStrafe.equals(strafenListe[i].getBeschreibung())) {
+						strafe = strafenListe[i];
 					}
 				}
 
-				for (int i = 0; i < alleSpieler.size(); i++) {
-					if (selectedSpieler.equals(alleSpieler.get(i).getVorname()
-							+ " " + alleSpieler.get(i).getNachname())) {
-						spieler = alleSpieler.get(i);
+				for (int i = 0; i < spielerListe.length; i++) {
+					if (selectedSpieler.equals(spielerListe[i].getVorname()
+							+ " " + spielerListe[i].getNachname())) {
+						spieler = spielerListe[i];
 					}
 				}
 
 				// Funktion der Strafenverwaltung aufrufen, die das Vergehen
 				// abspeichert
-				strafenverwaltunginstanz.vergehenAnlegen(spieler, strafe,
+				strafenverwaltungsinstanz.vergehenAnlegen(new Messenger(handler), spieler, strafe,
 						selectedYear + "-" + selectedMonth + "-" + selectedDay);
-
-				// Benachrichtigung anzeigen
-				Toast.makeText(StrafeEintragenActivity.this,
-						"Strafe eingetragen", Toast.LENGTH_LONG).show();
 
 				// Zur MainActivity wechseln
 				Intent geheZuMain = new Intent(StrafeEintragenActivity.this,

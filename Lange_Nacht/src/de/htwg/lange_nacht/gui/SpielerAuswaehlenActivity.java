@@ -28,21 +28,21 @@ public class SpielerAuswaehlenActivity extends Activity {
 		setContentView(R.layout.activity_spieler_auswaehlen);
 
 		spinnerSpielerAuswaehlen = (Spinner) findViewById(R.id.spinnerSpielerAuswaehlen);
-		ArrayList<Spieler> alleSpieler = strafenverwaltungsinstanz.getAllSpieler();
-		
-		String[] spielerliste = new String[alleSpieler.size()];
-		
-		for (int i = 0; i < spielerliste.length; i++) {
-			spielerliste[i]=alleSpieler.get(i).getVorname()+" "+alleSpieler.get(i).getNachname();
-		}
-
-		ArrayAdapter<String> adapterSpieler = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, spielerliste);
-		// Specify the layout to use when the list of choices appears
-		adapterSpieler
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		// Apply the adapter to the spinner
-		spinnerSpielerAuswaehlen.setAdapter(adapterSpieler);
+//		ArrayList<Spieler> alleSpieler = strafenverwaltungsinstanz.getAllSpieler();
+//		
+//		String[] spielerliste = new String[alleSpieler.size()];
+//		
+//		for (int i = 0; i < spielerliste.length; i++) {
+//			spielerliste[i]=alleSpieler.get(i).getVorname()+" "+alleSpieler.get(i).getNachname();
+//		}
+//
+//		ArrayAdapter<String> adapterSpieler = new ArrayAdapter<String>(this,
+//				android.R.layout.simple_spinner_item, spielerliste);
+//		// Specify the layout to use when the list of choices appears
+//		adapterSpieler
+//				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//		// Apply the adapter to the spinner
+//		spinnerSpielerAuswaehlen.setAdapter(adapterSpieler);
 
 		btnSpielerAuswaehlenSubmit = (Button) findViewById(R.id.btnSpielerAuswaehlenSubmit);
 		
