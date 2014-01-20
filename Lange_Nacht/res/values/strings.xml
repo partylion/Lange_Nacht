@@ -27,5 +27,7 @@
     <string name="title_section3">Section 3</string>
     <string name="title_activity_alle_strafen">AlleStrafenActivity</string>
     <string name="title_activity_offene_strafen">OffeneStrafenActivity</string>
+    <string name="title_activity_alle_strafen_fragment">AlleStrafenFragment</string>
+    <string name="bezahlt">bezahlt</string>
 
 </resources>

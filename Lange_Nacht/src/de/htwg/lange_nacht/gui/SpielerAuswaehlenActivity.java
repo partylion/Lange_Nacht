@@ -34,7 +34,6 @@ public class SpielerAuswaehlenActivity extends Activity {
 			Object list = message.obj;
 			if (message.arg1 == RESULT_OK && list != null
 					&& message.arg2 == Messages.GET_SPIELER) {
-				System.out.println("Hier passt");
 				ArrayList<Spieler> alleSpieler = (ArrayList<Spieler>) list;
 				adapterSpieler.clear();
 				spielerListe = new Spieler[alleSpieler.size()];
@@ -45,7 +44,6 @@ public class SpielerAuswaehlenActivity extends Activity {
 				}
 				adapterSpieler.notifyDataSetChanged();
 			} else {
-				System.out.println("Was tust du hier?");
 				Toast.makeText(SpielerAuswaehlenActivity.this,
 						"Download failed.", Toast.LENGTH_LONG).show();
 			}

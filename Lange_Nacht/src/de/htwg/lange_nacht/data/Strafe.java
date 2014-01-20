@@ -29,4 +29,9 @@ public class Strafe {
 	public String getID() {
 		return id;
 	}	
+	
+	@Override
+	public String toString(){
+		return beschreibung+" - "+preis+" €";
+	}
 }

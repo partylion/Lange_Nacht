@@ -37,9 +37,9 @@ public interface IStrafenverwaltung {
 	 * Gibt alle Strafen für den übergebenen Spieler zurück
 	 * 
 	 * @param spieler
-	 * @return Alle Strafen des Spielers als Array
+	 * @return Alle Strafen des Spielers als ArrayList
 	 */
-	public Strafe[] getStrafenFor(String vorname, String nachname);
+	public ArrayList<Strafe> getStrafenFor(String vorname, String nachname);
 
 	/**
 	 * Ruft eine PHP-Datei auf um einen neuen Spieler mit den übergebenen
@@ -95,4 +95,11 @@ public interface IStrafenverwaltung {
 	 */
 	public void vergehenAnlegen(Messenger messenger, Spieler spieler,
 			Strafe strafe, String datum);
+	
+	/**
+	 * Ruft eine PHP-Datei auf, die der Strafe das aktuelle Datum als Bezahldatum übergibt
+	 * 
+	 * @param strafe Die Strafe die bezahlt wurde
+	 */
+	public void setBezahlt(Messenger messenger, Strafe strafe, String vorname, String nachname);
 }

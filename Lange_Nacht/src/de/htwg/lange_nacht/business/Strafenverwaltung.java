@@ -24,14 +24,18 @@ public class Strafenverwaltung implements IStrafenverwaltung {
 
 	private String TAG = this.getClass().getSimpleName();
 
-	private Strafe[] dummyStrafenerzeugen() {
+	private ArrayList<Strafe> dummyStrafenerzeugen() {
 
 		Strafe strafe1 = new Strafe("Strafe1", 20);
 		Strafe strafe2 = new Strafe("Strafe2", 50);
-		Strafe strafe3 = new Strafe("Strafe1", 20);
-
-		Strafe[] dummyStrafen = { strafe1, strafe2, strafe3 };
-
+		Strafe strafe3 = new Strafe("Strafe3", 5);
+		
+		ArrayList<Strafe> dummyStrafen = new ArrayList<Strafe>();
+		
+		dummyStrafen.add(strafe1);
+		dummyStrafen.add(strafe2);
+		dummyStrafen.add(strafe3);
+		
 		return dummyStrafen;
 	}
 
@@ -58,7 +62,7 @@ public class Strafenverwaltung implements IStrafenverwaltung {
 	}
 
 	@Override
-	public Strafe[] getStrafenFor(String vorname, String nachname) {
+	public ArrayList<Strafe> getStrafenFor(String vorname, String nachname) {
 		// TODO Strafen für Spieler aus Datenhaltung holen
 		return dummyStrafenerzeugen();
 	}
@@ -146,6 +150,11 @@ public class Strafenverwaltung implements IStrafenverwaltung {
 	@Override
 	public void getAllSpieler(Context context, Messenger messenger) {
 		new AsyncTaskAlleSpieler(context, messenger).execute();
+	}
+
+	@Override
+	public void setBezahlt(Messenger messenger, Strafe strafe, String vorname, String nachname) {
+		new AsyncTaskStrafeBezahlt(messenger, nachname, nachname, strafe.getID()).execute();
 	}
 
 }
