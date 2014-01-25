@@ -38,7 +38,10 @@ public class AsyncTaskStrafeAnlegen extends AsyncTask<Void, Void, Void> {
 	@Override
 	protected Void doInBackground(Void... params) {
 		// URL zusammenbauen
+		// Zuhause
 		String url = "http://37.49.36.97/langenacht/insertStrafe.php?";
+		//Konstanz
+//		String url = "http://95.208.211.117/langenacht/insertStrafe.php?";
 		List<NameValuePair> parameter = new LinkedList<NameValuePair>();
 		parameter.add(new BasicNameValuePair("beschreibung", beschreibung));
 		parameter.add(new BasicNameValuePair("preis", preis));

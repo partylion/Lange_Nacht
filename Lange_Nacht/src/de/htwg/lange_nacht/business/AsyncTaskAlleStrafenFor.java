@@ -4,12 +4,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
@@ -24,24 +29,29 @@ import android.os.Message;
 import android.os.Messenger;
 import android.util.Log;
 import de.htwg.lange_nacht.data.Messages;
-import de.htwg.lange_nacht.data.Spieler;
+import de.htwg.lange_nacht.data.Strafe;
 
-public class AsyncTaskAlleSpieler extends AsyncTask<Void, Void, Void> {
+public class AsyncTaskAlleStrafenFor extends AsyncTask<Void, Void, Void> {
 
 	private Context context;
 	private Messenger messenger;
+	private String vorname;
+	private String nachname;
 
 	private ProgressDialog progressDialog;
-	private ArrayList<Spieler> spieler;
+	private ArrayList<Strafe> strafen;
 
 	private String TAG = this.getClass().getSimpleName();
 
-	public AsyncTaskAlleSpieler(Context context, Messenger messenger) {
+	public AsyncTaskAlleStrafenFor(Context context, Messenger messenger, String vorname, String nachname) {
 		this.context = context;
 		this.messenger = messenger;
+		this.vorname = vorname;
+		this.nachname = nachname;
 	}
 
 	protected void onPreExecute() {
+		System.out.println("komm ich hier her?");
 		super.onPreExecute();
 		progressDialog = ProgressDialog.show(context, "Fetching",
 				"Please wait...");
@@ -49,7 +59,7 @@ public class AsyncTaskAlleSpieler extends AsyncTask<Void, Void, Void> {
 
 	@Override
 	protected Void doInBackground(Void... arg0) {
-		getAllSpieler();
+		getAllStrafen();
 		return null;
 	}
 
@@ -58,8 +68,8 @@ public class AsyncTaskAlleSpieler extends AsyncTask<Void, Void, Void> {
 		progressDialog.dismiss();
 		Message msg = Message.obtain();
 		msg.arg1 = Activity.RESULT_OK;
-		msg.arg2 = Messages.GET_SPIELER;
-		msg.obj = spieler;
+		msg.arg2 = Messages.GET_ALLE_STRAFEN_FOR;
+		msg.obj = strafen;
 		try {
 			messenger.send(msg);
 		} catch (android.os.RemoteException e1) {
@@ -67,13 +77,13 @@ public class AsyncTaskAlleSpieler extends AsyncTask<Void, Void, Void> {
 		}
 	}
 
-	private void getAllSpieler() {
-		spieler = new ArrayList<Spieler>();
+	private void getAllStrafen() {
+		strafen = new ArrayList<Strafe>();
 		// Adresse zu PHP-Datei
 		// Zuhause
-		String url = "http://37.49.36.97/langenacht/getAllSpieler.php";
+		String url = "http://37.49.36.97/langenacht/getAllStrafenFor.php?";
 		//Konstanz
-//		String url = "http://95.208.211.117/langenacht/getAllSpieler.php";
+//		String url = "http://95.208.211.117/langenacht/getAllStrafenFor.php?";
 		
 		HttpClient httpclient = new DefaultHttpClient();
 		// Timeout setzen, falls Server nicht erreichbar ist
@@ -83,6 +93,13 @@ public class AsyncTaskAlleSpieler extends AsyncTask<Void, Void, Void> {
 				timeout * 1000);
 		httpParams
 				.setParameter(CoreConnectionPNames.SO_TIMEOUT, timeout * 1000);
+		
+		List<NameValuePair> parameter = new LinkedList<NameValuePair>();
+		parameter.add(new BasicNameValuePair("vorname", vorname));
+		parameter.add(new BasicNameValuePair("nachname", nachname));
+
+		String paramString = URLEncodedUtils.format(parameter, "utf-8");
+		url += paramString;
 
 		// PHP-Datei aufrufen
 		HttpGet httpget = new HttpGet(url);
@@ -111,13 +128,13 @@ public class AsyncTaskAlleSpieler extends AsyncTask<Void, Void, Void> {
 					}
 					jsonArray = new JSONArray(data);
 
-					// Aus dem JSONArray die Spieler auslesen und als Arraylist
-					// von Spieler-Objekten speichern
+					// Aus dem JSONArray die Strafen auslesen und als Arraylist
+					// von Strafen-Objekten speichern
 					for (int i = 0; i < jsonArray.length(); i++) {
 						JSONObject row = jsonArray.getJSONObject(i);
-						spieler.add(new Spieler(row.getString("idSpieler"), row
-								.getString("vorname"), row
-								.getString("nachname")));
+						strafen.add(new Strafe(row.getString("strafenID"), row
+								.getString("beschreibung"), Integer
+								.parseInt(row.getString("preis"))));
 					}
 
 				} catch (IllegalStateException e) {
@@ -131,7 +148,7 @@ public class AsyncTaskAlleSpieler extends AsyncTask<Void, Void, Void> {
 		}
 		// Wenn es einen Timeout gab
 		else {
-			spieler = null;
+			strafen = null;
 			Log.d(TAG, "Daten konnten nicht geladen werden");
 		}
 	}

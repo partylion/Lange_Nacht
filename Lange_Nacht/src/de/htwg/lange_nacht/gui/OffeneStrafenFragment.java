@@ -3,6 +3,8 @@ package de.htwg.lange_nacht.gui;
 import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -21,16 +23,34 @@ import de.htwg.lange_nacht.R;
 import de.htwg.lange_nacht.business.Strafenverwaltung;
 import de.htwg.lange_nacht.data.Messages;
 import de.htwg.lange_nacht.data.Strafe;
+import de.htwg.lange_nacht.gui.SpielerUebersicht.OffeneStrafenFragmentCommunicator;
 
 //TODO Namen irgendwo her holen und bezahltes Element aus der Liste löschen
-public class OffeneStrafenFragment extends Fragment {
+public class OffeneStrafenFragment extends Fragment implements
+		OffeneStrafenFragmentCommunicator {
 
 	private ListView lVOffeneStrafen;
 	private Button btnBezahlt;
 	private Strafenverwaltung strafenverwaltungsinstanz = Strafenverwaltung
 			.getInstance();
+	private ArrayList<Strafe> offeneStrafen;
 	private View rootView;
+	private Context context;
+	private ActivityCommunicatorOffen activityCommunicator;
 
+	/**
+	 * Interface, dass von der Activity SpielerUebersicht implementiert wird um
+	 * die Kommunikation mit der Activity zu ermoeglichen 
+	 */
+	public interface ActivityCommunicatorOffen {
+		/**
+		 * Ruft die Activity
+		 */
+		public void callActivityOffen();
+	}
+
+	// Behandelt die Antwort des AsyncTasks, der eine Strafe von offen auf
+	// bezahlt setzen kann
 	@SuppressLint("HandlerLeak")
 	private Handler handler = new Handler() {
 		public void handleMessage(Message message) {
@@ -54,15 +74,6 @@ public class OffeneStrafenFragment extends Fragment {
 
 		lVOffeneStrafen = (ListView) rootView.findViewById(R.id.listViewOffen);
 
-		final ArrayList<Strafe> strafen = strafenverwaltungsinstanz.getStrafenFor(
-				"test", "testytest");
-
-		ListAdapter adapter = new ArrayAdapter<Strafe>(getActivity()
-				.getApplicationContext(), R.layout.simplerow, strafen);
-
-		lVOffeneStrafen.setAdapter(adapter);
-		lVOffeneStrafen.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-
 		btnBezahlt = (Button) rootView.findViewById(R.id.btnBezahlt);
 		btnBezahlt.setOnClickListener(new OnClickListener() {
 
@@ -71,12 +82,37 @@ public class OffeneStrafenFragment extends Fragment {
 				int posi = lVOffeneStrafen.getCheckedItemPosition();
 				if (posi != ListView.INVALID_POSITION) {
 
-					strafenverwaltungsinstanz.setBezahlt(new Messenger(handler),
-							strafen.get(posi), "vorname", "nachname");
+					strafenverwaltungsinstanz.setBezahlt(
+							new Messenger(handler), offeneStrafen.get(posi),
+							"vorname", "nachname");
 				}
 			}
 		});
 
+		activityCommunicator.callActivityOffen();
+
 		return rootView;
 	}
+
+	@Override
+	public void passDataToFragment(ArrayList<Strafe> offeneStrafen) {
+		// Von der Activity übergebene Daten in die ListView einfügen
+		this.offeneStrafen = offeneStrafen;
+		ListAdapter adapter = new ArrayAdapter<Strafe>(getActivity()
+				.getApplicationContext(), R.layout.simplerow, offeneStrafen);
+
+		lVOffeneStrafen.setAdapter(adapter);
+		lVOffeneStrafen.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+
+		// Hier die jeweiligen Interfaces im Fragment und der Activity setzen
+		context = getActivity();
+		activityCommunicator = (ActivityCommunicatorOffen) context;
+		((SpielerUebersicht) context).offeneStrafenFragmentCommunicator = this;
+	}
+
 }

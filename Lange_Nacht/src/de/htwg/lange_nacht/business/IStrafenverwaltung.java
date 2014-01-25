@@ -1,7 +1,5 @@
 package de.htwg.lange_nacht.business;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.os.Messenger;
 import de.htwg.lange_nacht.data.Spieler;
@@ -10,8 +8,7 @@ import de.htwg.lange_nacht.data.Strafe;
 public interface IStrafenverwaltung {
 
 	/**
-	 * Holt sich alle vorhandenen Spieler und Strafen von der Datenhaltung und
-	 * gibt diese als Arraylist zurück
+	 * Holt sich alle vorhandenen Spieler und Strafen von der Datenhaltung
 	 * 
 	 * @param context
 	 *            Die Activity, welche die Methode aufruft
@@ -34,12 +31,61 @@ public interface IStrafenverwaltung {
 	public void getAllSpieler(Context context, Messenger messenger);
 
 	/**
-	 * Gibt alle Strafen für den übergebenen Spieler zurück
+	 * Ruft einen AsyncTask auf, der alle Strafen für den Spieler vom Server
+	 * holt
 	 * 
-	 * @param spieler
-	 * @return Alle Strafen des Spielers als ArrayList
+	 * @param context
+	 *            Die Activity, welche die Methode aufruft
+	 * @param messenger
+	 *            Der Messenger über den Daten zurück zu Activity gesendet
+	 *            werden
+	 * @param vorname
+	 *            Der Vorname des Spielers zu dem die Strafen geholt werden
+	 *            sollen
+	 * @param nachname
+	 *            Der Nachname des Spielers zu dem die Strafen geholt werden
+	 *            sollen
 	 */
-	public ArrayList<Strafe> getStrafenFor(String vorname, String nachname);
+	public void getAllStrafenFor(Context context, Messenger messenger,
+			String vorname, String nachname);
+
+	/**
+	 * Ruft einen AsyncTask auf, der alle offene Strafen für den Spieler vom
+	 * Server holt
+	 * 
+	 * @param context
+	 *            Die Activity, welche die Methode aufruft
+	 * @param messenger
+	 *            Der Messenger über den Daten zurück zu Activity gesendet
+	 *            werden
+	 * @param vorname
+	 *            Der Vorname des Spielers zu dem die Strafen geholt werden
+	 *            sollen
+	 * @param nachname
+	 *            Der Nachname des Spielers zu dem die Strafen geholt werden
+	 *            sollen
+	 */
+	public void getOffeneStrafenFor(Context context, Messenger messenger,
+			String vorname, String nachname);
+
+	/**
+	 * Ruft einen AsyncTask auf, der alle bezahlten Strafen für den Spieler vom
+	 * Server holt
+	 * 
+	 * @param context
+	 *            Die Activity, welche die Methode aufruft
+	 * @param messenger
+	 *            Der Messenger über den Daten zurück zu Activity gesendet
+	 *            werden
+	 * @param vorname
+	 *            Der Vorname des Spielers zu dem die Strafen geholt werden
+	 *            sollen
+	 * @param nachname
+	 *            Der Nachname des Spielers zu dem die Strafen geholt werden
+	 *            sollen
+	 */
+	public void getBezahlteStrafenFor(Context context, Messenger messenger,
+			String vorname, String nachname);
 
 	/**
 	 * Ruft eine PHP-Datei auf um einen neuen Spieler mit den übergebenen
@@ -72,14 +118,6 @@ public interface IStrafenverwaltung {
 			String preis);
 
 	/**
-	 * Holt sich alle vorhandenen Strafen von der Datenhaltung und gibt sie als
-	 * Araylist zurück
-	 * 
-	 * @return eine Arraylist mit allen Strafen
-	 */
-	public ArrayList<Strafe> getAllStrafen();
-
-	/**
 	 * Ruft eine PHP-Datei auf um ein neues Vergehen mit den übergebenen
 	 * Parametern anzulegen
 	 * 
@@ -95,11 +133,14 @@ public interface IStrafenverwaltung {
 	 */
 	public void vergehenAnlegen(Messenger messenger, Spieler spieler,
 			Strafe strafe, String datum);
-	
+
 	/**
-	 * Ruft eine PHP-Datei auf, die der Strafe das aktuelle Datum als Bezahldatum übergibt
+	 * Ruft eine PHP-Datei auf, die der Strafe das aktuelle Datum als
+	 * Bezahldatum übergibt
 	 * 
-	 * @param strafe Die Strafe die bezahlt wurde
+	 * @param strafe
+	 *            Die Strafe die bezahlt wurde
 	 */
-	public void setBezahlt(Messenger messenger, Strafe strafe, String vorname, String nachname);
+	public void setBezahlt(Messenger messenger, Strafe strafe, String vorname,
+			String nachname);
 }

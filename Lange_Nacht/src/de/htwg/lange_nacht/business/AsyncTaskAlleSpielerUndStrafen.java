@@ -78,9 +78,12 @@ public class AsyncTaskAlleSpielerUndStrafen extends AsyncTask<Void, Void, Void> 
 	private void getAllSpieler() {
 		spieler = new ArrayList<Spieler>();
 		// Adresse zu PHP-Datei
+		//Zuhause
 		String url = "http://37.49.36.97/langenacht/getAllSpieler.php";
+		//Konstanz
+//		String url = "http://95.208.211.117/langenacht/getAllSpieler.php";
+		
 		HttpClient httpclient = new DefaultHttpClient();
-
 		// Timeout setzen, falls Server nicht erreichbar ist
 		int timeout = 5; // seconds
 		HttpParams httpParams = httpclient.getParams();

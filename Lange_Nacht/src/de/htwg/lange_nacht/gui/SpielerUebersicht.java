@@ -1,25 +1,114 @@
 package de.htwg.lange_nacht.gui;
 
+import java.util.ArrayList;
+
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Messenger;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.widget.TextView;
+import android.widget.Toast;
 import de.htwg.lange_nacht.R;
+import de.htwg.lange_nacht.business.Strafenverwaltung;
+import de.htwg.lange_nacht.data.Messages;
+import de.htwg.lange_nacht.data.Spieler;
+import de.htwg.lange_nacht.data.Strafe;
+import de.htwg.lange_nacht.gui.AlleStrafenFragment.ActivityCommunicatorAlle;
+import de.htwg.lange_nacht.gui.BezahlteStrafenFragment.ActivityCommunicatorBezahlt;
+import de.htwg.lange_nacht.gui.OffeneStrafenFragment.ActivityCommunicatorOffen;
 
 public class SpielerUebersicht extends ActionBarActivity implements
-		android.support.v7.app.ActionBar.TabListener{
+		android.support.v7.app.ActionBar.TabListener,
+		ActivityCommunicatorOffen, ActivityCommunicatorBezahlt,
+		ActivityCommunicatorAlle {
 
 	private TextView txtViewSpielerName;
-//	private Strafenverwaltung strafenverwaltungsinstanz = Strafenverwaltung
-//			.getInstance();
+	private Strafenverwaltung strafenverwaltungsinstanz = Strafenverwaltung
+			.getInstance();
 
 	private ViewPager viewPager;
 	private TabsPagerAdapter mAdapter;
 	private ActionBar actionBar;
+	private String vorname, nachname;
 	// Tab titles
 	private String[] tabs = { "Alle", "Offen", "Bezahlt" };
+	public OffeneStrafenFragmentCommunicator offeneStrafenFragmentCommunicator;
+	public BezahlteStrafenFragmentCommunicator bezahlteStrafenFragmentCommunicator;
+	public AlleStrafenFragmentCommunicator alleStrafenFragmentCommunicator;
+
+	private Handler handler = new Handler() {
+		public void handleMessage(Message message) {
+			Object list = message.obj;
+			System.out.println("kommt hier was?");
+			if (message.arg1 == RESULT_OK && list != null
+					&& message.arg2 == Messages.GET_ALLE_STRAFEN_FOR) {
+				ArrayList<Strafe> alleStrafen = (ArrayList<Strafe>) list;
+				alleStrafenFragmentCommunicator.passDataToFragment(alleStrafen);
+			} else if (message.arg1 == RESULT_OK && list != null
+					&& message.arg2 == Messages.GET_OFFENE_STRAFEN_FOR) {
+				ArrayList<Strafe> offeneStrafen = (ArrayList<Strafe>) list;
+				offeneStrafenFragmentCommunicator.passDataToFragment(offeneStrafen);
+			}
+			else if (message.arg1 == RESULT_OK && list != null
+					&& message.arg2 == Messages.GET_BEZAHLTE_STRAFEN_FOR) {
+				ArrayList<Strafe> bezahlteStrafen = (ArrayList<Strafe>) list;
+				bezahlteStrafenFragmentCommunicator.passDataToFragment(bezahlteStrafen);
+			} else {
+				Toast.makeText(SpielerUebersicht.this,
+						"Download failed.", Toast.LENGTH_LONG).show();
+			}
+		};
+	};
+
+	/**
+	 * Interface, dass vom Fragment OffeneStrafenFragment implementiert wird um
+	 * die Kommunikation mit dem Fragment zu ermoeglichen
+	 */
+	public interface OffeneStrafenFragmentCommunicator {
+		/**
+		 * Uebergibt eine ArrayList mit allen offenen Strafen des Spielers an
+		 * das Fragment
+		 * 
+		 * @param offeneStrafen
+		 *            ArrayList mit allen offenen Strafen des Spielers
+		 */
+		public void passDataToFragment(ArrayList<Strafe> offeneStrafen);
+	}
+
+	/**
+	 * Interface, dass vom Fragment BezahlteStrafenFragment implementiert wird
+	 * um die Kommunikation mit dem Fragment zu ermoeglichen
+	 */
+	public interface BezahlteStrafenFragmentCommunicator {
+		/**
+		 * Uebergibt eine ArrayList mit allen bezahlten Strafen des Spielers an
+		 * das Fragment
+		 * 
+		 * @param bezahlteStrafen
+		 *            ArrayList mit allen bezahlten Strafen des Spielers
+		 */
+		public void passDataToFragment(ArrayList<Strafe> bezahlteStrafen);
+	}
+
+	/**
+	 * Interface, dass vom Fragment AlleStrafenFragment implementiert wird um
+	 * die Kommunikation mit dem Fragment zu ermoeglichen
+	 */
+	public interface AlleStrafenFragmentCommunicator {
+		/**
+		 * Uebergibt eine ArrayList mit allen Strafen des Spielers an das
+		 * Fragment
+		 * 
+		 * @param alleStrafen
+		 *            ArrayList mit allen bezahlten Strafen des Spielers
+		 */
+		public void passDataToFragment(ArrayList<Strafe> alleStrafen);
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,34 +152,16 @@ public class SpielerUebersicht extends ActionBarActivity implements
 			}
 		});
 
+		// Uebergabeparameter der vorhergehenden Activity holen
 		String spielerName = getIntent().getExtras().getString("Spielername");
 
 		txtViewSpielerName = (TextView) findViewById(R.id.txtViewSpielerName);
 		txtViewSpielerName.setText(spielerName);
-//
-//		String[] name = spielerName.split("\\s");
-//		String vorname = name[0];
-//		String nachname = name[1];
-//
-//		// TODO Information zum Spieler holen und übersichtlich darstellen
-//		ArrayList<Strafe> strafen = strafenverwaltungsinstanz.getStrafenFor(vorname,
-//				nachname);
-//		
-//		ArrayList<String> strafenString = new ArrayList<String>();
-//		
-//		for (int i = 0; i < strafen.size(); i++) {
-//			strafenString.add(strafen.get(i).getBeschreibung() + " " + strafen.get(i).getPreis());			
-//		}
-//
-//		lVOffeneStrafen = (ListView) findViewById(R.id.listViewOffen);
-//
-//		ListAdapter adapter = new ArrayAdapter<Strafe>(getApplicationContext(),
-//				android.R.layout.simple_list_item_1, strafen);
-//		
-//		OffeneStrafenFragment offeneStrafenFragmentInstanz = OffeneStrafenFragment.getInstance();
-//
-//		offeneStrafenFragmentInstanz.fillList(adapter);
 
+		// und in Vorname und Nachname aufsplitten
+		String[] name = spielerName.split("\\s");
+		vorname = name[0];
+		nachname = name[1];
 	}
 
 	@Override
@@ -118,6 +189,24 @@ public class SpielerUebersicht extends ActionBarActivity implements
 	public void onTabUnselected(android.support.v7.app.ActionBar.Tab tab,
 			android.support.v4.app.FragmentTransaction ft) {
 
+	}
+
+	@Override
+	public void callActivityOffen() {
+		strafenverwaltungsinstanz.getOffeneStrafenFor(this, new Messenger(
+				handler), vorname, nachname);
+	}
+
+	@Override
+	public void callActivityBezahlt() {
+		strafenverwaltungsinstanz.getBezahlteStrafenFor(this, new Messenger(
+				handler), vorname, nachname);
+	}
+
+	@Override
+	public void callActivityAlle() {
+		strafenverwaltungsinstanz.getAllStrafenFor(this,
+				new Messenger(handler), vorname, nachname);
 	}
 
 }

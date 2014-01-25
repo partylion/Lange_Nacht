@@ -37,8 +37,10 @@ public class AsyncTaskSpielerAnlegen extends AsyncTask<Void, Void, Void> {
 
 	@Override
 	protected Void doInBackground(Void... params) {
+		// Zuhause
 		String url = "http://37.49.36.97/langenacht/insertSpieler.php?";
-
+		//Konstanz
+//		String url = "http://95.208.211.117/langenacht/insertSpieler.php?";
 		List<NameValuePair> parameter = new LinkedList<NameValuePair>();
 		parameter.add(new BasicNameValuePair("vorname", vorname));
 		parameter.add(new BasicNameValuePair("nachname", nachname));
