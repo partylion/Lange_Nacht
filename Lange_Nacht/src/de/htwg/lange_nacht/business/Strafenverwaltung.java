@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Messenger;
 import de.htwg.lange_nacht.data.Spieler;
 import de.htwg.lange_nacht.data.Strafe;
+import de.htwg.lange_nacht.data.Vergehen;
 
 public class Strafenverwaltung implements IStrafenverwaltung {
 
@@ -11,6 +12,8 @@ public class Strafenverwaltung implements IStrafenverwaltung {
 	protected Strafenverwaltung() {
 
 	}
+	
+	public static final String SERVER_IP = "http://78.43.50.150";
 
 	private static Strafenverwaltung strafenverwaltungsinstanz = new Strafenverwaltung();
 
@@ -76,8 +79,13 @@ public class Strafenverwaltung implements IStrafenverwaltung {
 	}
 
 	@Override
-	public void setBezahlt(Messenger messenger, Strafe strafe, String vorname, String nachname) {
-		new AsyncTaskStrafeBezahlt(messenger, nachname, nachname, strafe.getID()).execute();
+	public void setBezahlt(Messenger messenger, Vergehen vergehen) {
+		new AsyncTaskStrafeBezahlt(messenger, vergehen).execute();
+	}
+
+	@Override
+	public void getAllOffeneStrafen(Context context, Messenger messenger) {
+		new AsyncTaskAlleOffenenStrafen(context, messenger).execute();		
 	}
 
 }

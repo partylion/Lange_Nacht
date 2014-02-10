@@ -15,6 +15,7 @@ public class MainActivity extends Activity {
 	private Button btnStrafeAnlegen;
 	private Button btnSpielerAuswaehlen;
 	private Button btnSpielerAnlegen;
+	private Button btnOffeneStrafen;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +26,7 @@ public class MainActivity extends Activity {
 		btnStrafeAnlegen = (Button) findViewById(R.id.btnStrafeAnlegen);
 		btnSpielerAuswaehlen = (Button) findViewById(R.id.btnSpielerAuswaehlen);
 		btnSpielerAnlegen = (Button) findViewById(R.id.btnSpielerAnlegen);
+		btnOffeneStrafen = (Button) findViewById(R.id.btnOffeneStrafen);
 
 		// Festlegen was beim Klick auf Strafe eintragen passiert
 		btnStrafeEintragen.setOnClickListener(new OnClickListener() {
@@ -61,16 +63,28 @@ public class MainActivity extends Activity {
 				startActivity(geheZuSpielerAuswaehlen);
 			}
 		});
-		
+
 		// Festlegen was beim Klick auf Neuen Spieler anlegen passiert
 		btnSpielerAnlegen.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				Intent geheZuSpielerAnlegen = new Intent(MainActivity.this,
+						SpielerAnlegenActivity.class);
+				startActivity(geheZuSpielerAnlegen);
+			}
+		});
+		
+		// Festlegen was beim Klick auf Alle Offenen Strafen passiert
+				btnOffeneStrafen.setOnClickListener(new OnClickListener() {
 
 					@Override
 					public void onClick(View v) {
 
-						Intent geheZuSpielerAnlegen = new Intent(MainActivity.this,
-								SpielerAnlegenActivity.class);
-						startActivity(geheZuSpielerAnlegen);
+						Intent geheZuAlleOffenenStrafen = new Intent(MainActivity.this,
+								AlleOffenenStrafenActivity.class);
+						startActivity(geheZuAlleOffenenStrafen);
 					}
 				});
 	}

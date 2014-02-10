@@ -24,17 +24,17 @@ public class SpielerAnlegenActivity extends Activity {
 	private EditText editTextVorname;
 	private Strafenverwaltung strafenverwaltunginstanz = Strafenverwaltung
 			.getInstance();
-	
-	
+
 	@SuppressLint("HandlerLeak")
 	private Handler handler = new Handler() {
 		public void handleMessage(Message message) {
-			if (message.arg1 == RESULT_OK && message.arg2 == Messages.SET_SPIELER) {
-				Toast.makeText(SpielerAnlegenActivity.this, "Spieler angelegt", Toast.LENGTH_LONG).show();
-			} 
-			else {
-				Toast.makeText(SpielerAnlegenActivity.this,
-						"Upload failed.", Toast.LENGTH_LONG).show();
+			if (message.arg1 == RESULT_OK
+					&& message.arg2 == Messages.SET_SPIELER) {
+				Toast.makeText(SpielerAnlegenActivity.this, "Spieler angelegt",
+						Toast.LENGTH_LONG).show();
+			} else {
+				Toast.makeText(SpielerAnlegenActivity.this, "Upload failed.",
+						Toast.LENGTH_LONG).show();
 			}
 		};
 	};
@@ -56,11 +56,18 @@ public class SpielerAnlegenActivity extends Activity {
 				String vorname = editTextVorname.getText().toString().trim();
 				String nachname = editTextNachname.getText().toString().trim();
 
-				strafenverwaltunginstanz.spielerAnlegen(new Messenger(handler), vorname, nachname);
+				if (!(vorname.equals("")) && !(nachname.equals(""))) {
+					strafenverwaltunginstanz.spielerAnlegen(new Messenger(
+							handler), vorname, nachname);
 
-				Intent geheZuMain = new Intent(SpielerAnlegenActivity.this,
-						MainActivity.class);
-				startActivity(geheZuMain);
+					Intent geheZuMain = new Intent(SpielerAnlegenActivity.this,
+							MainActivity.class);
+					startActivity(geheZuMain);
+				} else {
+					Toast.makeText(SpielerAnlegenActivity.this,
+							"Bitte alle Felden ausfüllen", Toast.LENGTH_LONG)
+							.show();
+				}
 			}
 		});
 	}

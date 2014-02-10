@@ -29,7 +29,7 @@ import android.os.Message;
 import android.os.Messenger;
 import android.util.Log;
 import de.htwg.lange_nacht.data.Messages;
-import de.htwg.lange_nacht.data.Strafe;
+import de.htwg.lange_nacht.data.Vergehen;
 
 public class AsyncTaskAlleStrafenFor extends AsyncTask<Void, Void, Void> {
 
@@ -39,7 +39,7 @@ public class AsyncTaskAlleStrafenFor extends AsyncTask<Void, Void, Void> {
 	private String nachname;
 
 	private ProgressDialog progressDialog;
-	private ArrayList<Strafe> strafen;
+	private ArrayList<Vergehen> vergehen;
 
 	private String TAG = this.getClass().getSimpleName();
 
@@ -51,7 +51,6 @@ public class AsyncTaskAlleStrafenFor extends AsyncTask<Void, Void, Void> {
 	}
 
 	protected void onPreExecute() {
-		System.out.println("komm ich hier her?");
 		super.onPreExecute();
 		progressDialog = ProgressDialog.show(context, "Fetching",
 				"Please wait...");
@@ -69,7 +68,7 @@ public class AsyncTaskAlleStrafenFor extends AsyncTask<Void, Void, Void> {
 		Message msg = Message.obtain();
 		msg.arg1 = Activity.RESULT_OK;
 		msg.arg2 = Messages.GET_ALLE_STRAFEN_FOR;
-		msg.obj = strafen;
+		msg.obj = vergehen;
 		try {
 			messenger.send(msg);
 		} catch (android.os.RemoteException e1) {
@@ -78,12 +77,9 @@ public class AsyncTaskAlleStrafenFor extends AsyncTask<Void, Void, Void> {
 	}
 
 	private void getAllStrafen() {
-		strafen = new ArrayList<Strafe>();
+		vergehen = new ArrayList<Vergehen>();
 		// Adresse zu PHP-Datei
-		// Zuhause
-		String url = "http://37.49.36.97/langenacht/getAllStrafenFor.php?";
-		//Konstanz
-//		String url = "http://95.208.211.117/langenacht/getAllStrafenFor.php?";
+		String url = Strafenverwaltung.SERVER_IP+"/langenacht/getAllStrafenFor.php?";
 		
 		HttpClient httpclient = new DefaultHttpClient();
 		// Timeout setzen, falls Server nicht erreichbar ist
@@ -116,7 +112,6 @@ public class AsyncTaskAlleStrafenFor extends AsyncTask<Void, Void, Void> {
 			String data = "";
 			StatusLine statusLine = response.getStatusLine();
 			int statusCode = statusLine.getStatusCode();
-			System.out.println(statusCode);
 			if (statusCode == 200) {
 				try {
 					BufferedReader br = new BufferedReader(
@@ -132,9 +127,13 @@ public class AsyncTaskAlleStrafenFor extends AsyncTask<Void, Void, Void> {
 					// von Strafen-Objekten speichern
 					for (int i = 0; i < jsonArray.length(); i++) {
 						JSONObject row = jsonArray.getJSONObject(i);
-						strafen.add(new Strafe(row.getString("strafenID"), row
-								.getString("beschreibung"), Integer
-								.parseInt(row.getString("preis"))));
+						vergehen.add(new Vergehen(row.getString("beschreibung"),
+								Integer.parseInt(row.getString("preis")),
+								Integer.parseInt(row.getString("strafenID")),
+								row.getString("vorname"), row
+										.getString("nachname"), Integer
+										.parseInt(row.getString("spielerID")),
+								row.getString("datum")));
 					}
 
 				} catch (IllegalStateException e) {
@@ -148,7 +147,7 @@ public class AsyncTaskAlleStrafenFor extends AsyncTask<Void, Void, Void> {
 		}
 		// Wenn es einen Timeout gab
 		else {
-			strafen = null;
+			vergehen = null;
 			Log.d(TAG, "Daten konnten nicht geladen werden");
 		}
 	}

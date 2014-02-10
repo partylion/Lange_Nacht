@@ -2,7 +2,6 @@ package de.htwg.lange_nacht.gui;
 
 import java.util.ArrayList;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,8 +15,7 @@ import android.widget.Toast;
 import de.htwg.lange_nacht.R;
 import de.htwg.lange_nacht.business.Strafenverwaltung;
 import de.htwg.lange_nacht.data.Messages;
-import de.htwg.lange_nacht.data.Spieler;
-import de.htwg.lange_nacht.data.Strafe;
+import de.htwg.lange_nacht.data.Vergehen;
 import de.htwg.lange_nacht.gui.AlleStrafenFragment.ActivityCommunicatorAlle;
 import de.htwg.lange_nacht.gui.BezahlteStrafenFragment.ActivityCommunicatorBezahlt;
 import de.htwg.lange_nacht.gui.OffeneStrafenFragment.ActivityCommunicatorOffen;
@@ -35,6 +33,9 @@ public class SpielerUebersicht extends ActionBarActivity implements
 	private TabsPagerAdapter mAdapter;
 	private ActionBar actionBar;
 	private String vorname, nachname;
+	private ArrayList<Vergehen> alleStrafen;
+	private ArrayList<Vergehen> offeneStrafen;
+	private ArrayList<Vergehen> bezahlteStrafen;
 	// Tab titles
 	private String[] tabs = { "Alle", "Offen", "Bezahlt" };
 	public OffeneStrafenFragmentCommunicator offeneStrafenFragmentCommunicator;
@@ -44,23 +45,23 @@ public class SpielerUebersicht extends ActionBarActivity implements
 	private Handler handler = new Handler() {
 		public void handleMessage(Message message) {
 			Object list = message.obj;
-			System.out.println("kommt hier was?");
 			if (message.arg1 == RESULT_OK && list != null
 					&& message.arg2 == Messages.GET_ALLE_STRAFEN_FOR) {
-				ArrayList<Strafe> alleStrafen = (ArrayList<Strafe>) list;
+				alleStrafen = (ArrayList<Vergehen>) list;
 				alleStrafenFragmentCommunicator.passDataToFragment(alleStrafen);
 			} else if (message.arg1 == RESULT_OK && list != null
 					&& message.arg2 == Messages.GET_OFFENE_STRAFEN_FOR) {
-				ArrayList<Strafe> offeneStrafen = (ArrayList<Strafe>) list;
-				offeneStrafenFragmentCommunicator.passDataToFragment(offeneStrafen);
-			}
-			else if (message.arg1 == RESULT_OK && list != null
+				offeneStrafen = (ArrayList<Vergehen>) list;
+				offeneStrafenFragmentCommunicator
+						.passDataToFragment(offeneStrafen);
+			} else if (message.arg1 == RESULT_OK && list != null
 					&& message.arg2 == Messages.GET_BEZAHLTE_STRAFEN_FOR) {
-				ArrayList<Strafe> bezahlteStrafen = (ArrayList<Strafe>) list;
-				bezahlteStrafenFragmentCommunicator.passDataToFragment(bezahlteStrafen);
+				bezahlteStrafen = (ArrayList<Vergehen>) list;
+				bezahlteStrafenFragmentCommunicator
+						.passDataToFragment(bezahlteStrafen);
 			} else {
-				Toast.makeText(SpielerUebersicht.this,
-						"Download failed.", Toast.LENGTH_LONG).show();
+				Toast.makeText(SpielerUebersicht.this, "Download failed.",
+						Toast.LENGTH_LONG).show();
 			}
 		};
 	};
@@ -77,7 +78,7 @@ public class SpielerUebersicht extends ActionBarActivity implements
 		 * @param offeneStrafen
 		 *            ArrayList mit allen offenen Strafen des Spielers
 		 */
-		public void passDataToFragment(ArrayList<Strafe> offeneStrafen);
+		public void passDataToFragment(ArrayList<Vergehen> offeneStrafen);
 	}
 
 	/**
@@ -92,7 +93,7 @@ public class SpielerUebersicht extends ActionBarActivity implements
 		 * @param bezahlteStrafen
 		 *            ArrayList mit allen bezahlten Strafen des Spielers
 		 */
-		public void passDataToFragment(ArrayList<Strafe> bezahlteStrafen);
+		public void passDataToFragment(ArrayList<Vergehen> bezahlteStrafen);
 	}
 
 	/**
@@ -107,7 +108,7 @@ public class SpielerUebersicht extends ActionBarActivity implements
 		 * @param alleStrafen
 		 *            ArrayList mit allen bezahlten Strafen des Spielers
 		 */
-		public void passDataToFragment(ArrayList<Strafe> alleStrafen);
+		public void passDataToFragment(ArrayList<Vergehen> alleStrafen);
 	}
 
 	@Override
@@ -118,6 +119,7 @@ public class SpielerUebersicht extends ActionBarActivity implements
 
 		// Initilization
 		viewPager = (ViewPager) findViewById(R.id.pager);
+		viewPager.setOffscreenPageLimit(2);
 		actionBar = getSupportActionBar();
 		mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
 
@@ -162,6 +164,7 @@ public class SpielerUebersicht extends ActionBarActivity implements
 		String[] name = spielerName.split("\\s");
 		vorname = name[0];
 		nachname = name[1];
+
 	}
 
 	@Override
@@ -207,6 +210,12 @@ public class SpielerUebersicht extends ActionBarActivity implements
 	public void callActivityAlle() {
 		strafenverwaltungsinstanz.getAllStrafenFor(this,
 				new Messenger(handler), vorname, nachname);
+	}
+
+	@Override
+	public void refreshActivity() {
+		finish();
+		startActivity(getIntent());
 	}
 
 }

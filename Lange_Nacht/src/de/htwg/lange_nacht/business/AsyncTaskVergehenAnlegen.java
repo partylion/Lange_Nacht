@@ -38,9 +38,8 @@ public class AsyncTaskVergehenAnlegen extends AsyncTask<Void, Void, Void>{
 	@Override
 	protected Void doInBackground(Void... params) {
 		//Zuhause
-		String url = "http://37.49.36.97/langenacht/insertVergehen.php?";
-		//Konstanz
-//		String url = "http://95.208.211.117/langenacht/insertVergehen.php?";
+		String url = Strafenverwaltung.SERVER_IP+"/langenacht/insertVergehen.php?";
+
 		List<NameValuePair> parameter = new LinkedList<NameValuePair>();
 		parameter.add(new BasicNameValuePair("spielerID", spieler.getID()));
 		parameter.add(new BasicNameValuePair("strafenID", strafe.getID()));
@@ -48,8 +47,6 @@ public class AsyncTaskVergehenAnlegen extends AsyncTask<Void, Void, Void>{
 
 		String paramString = URLEncodedUtils.format(parameter, "utf-8");
 		url += paramString;
-		
-		System.out.println(url);
 
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpGet httpget = new HttpGet(url);

@@ -11,4 +11,5 @@ public final class Messages {
 	public static final int GET_ALLE_STRAFEN_FOR = 8;
 	public static final int GET_OFFENE_STRAFEN_FOR = 9;
 	public static final int GET_BEZAHLTE_STRAFEN_FOR = 10;
+	public static final int GET_ALLE_OFFENEN_STRAFEN = 11;
 }

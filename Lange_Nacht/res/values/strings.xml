@@ -29,5 +29,7 @@
     <string name="title_activity_offene_strafen">OffeneStrafenActivity</string>
     <string name="title_activity_alle_strafen_fragment">AlleStrafenFragment</string>
     <string name="bezahlt">bezahlt</string>
+    <string name="alle_offenen_strafen">Alle Offenen Strafen</string>
+    <string name="title_activity_alle_offenen_strafen">AlleOffenenStrafenActivity</string>
 
 </resources>

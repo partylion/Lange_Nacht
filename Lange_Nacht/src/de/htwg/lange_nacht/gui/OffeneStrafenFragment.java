@@ -22,10 +22,9 @@ import android.widget.Toast;
 import de.htwg.lange_nacht.R;
 import de.htwg.lange_nacht.business.Strafenverwaltung;
 import de.htwg.lange_nacht.data.Messages;
-import de.htwg.lange_nacht.data.Strafe;
+import de.htwg.lange_nacht.data.Vergehen;
 import de.htwg.lange_nacht.gui.SpielerUebersicht.OffeneStrafenFragmentCommunicator;
 
-//TODO Namen irgendwo her holen und bezahltes Element aus der Liste löschen
 public class OffeneStrafenFragment extends Fragment implements
 		OffeneStrafenFragmentCommunicator {
 
@@ -33,20 +32,25 @@ public class OffeneStrafenFragment extends Fragment implements
 	private Button btnBezahlt;
 	private Strafenverwaltung strafenverwaltungsinstanz = Strafenverwaltung
 			.getInstance();
-	private ArrayList<Strafe> offeneStrafen;
+	private ArrayList<Vergehen> offeneStrafen;
 	private View rootView;
 	private Context context;
 	private ActivityCommunicatorOffen activityCommunicator;
 
 	/**
 	 * Interface, dass von der Activity SpielerUebersicht implementiert wird um
-	 * die Kommunikation mit der Activity zu ermoeglichen 
+	 * die Kommunikation mit der Activity zu ermoeglichen
 	 */
 	public interface ActivityCommunicatorOffen {
 		/**
 		 * Ruft die Activity
 		 */
 		public void callActivityOffen();
+		
+		/**
+		 * 
+		 */
+		public void refreshActivity();
 	}
 
 	// Behandelt die Antwort des AsyncTasks, der eine Strafe von offen auf
@@ -58,6 +62,7 @@ public class OffeneStrafenFragment extends Fragment implements
 					&& message.arg2 == Messages.UPDATE_STRAFE) {
 				Toast.makeText(rootView.getContext(), "Strafe bezahlt",
 						Toast.LENGTH_LONG).show();
+				activityCommunicator.refreshActivity();
 			} else {
 				Toast.makeText(rootView.getContext(), "Upload failed.",
 						Toast.LENGTH_LONG).show();
@@ -82,11 +87,18 @@ public class OffeneStrafenFragment extends Fragment implements
 				int posi = lVOffeneStrafen.getCheckedItemPosition();
 				if (posi != ListView.INVALID_POSITION) {
 
+					Vergehen bezahlt = offeneStrafen.get(posi);
+
 					strafenverwaltungsinstanz.setBezahlt(
-							new Messenger(handler), offeneStrafen.get(posi),
-							"vorname", "nachname");
+							new Messenger(handler), bezahlt);
+					
+				} else {
+					Toast.makeText(rootView.getContext(),
+							"Bitte zuerst ein Element auswählen.",
+							Toast.LENGTH_LONG).show();
 				}
 			}
+
 		});
 
 		activityCommunicator.callActivityOffen();
@@ -95,10 +107,10 @@ public class OffeneStrafenFragment extends Fragment implements
 	}
 
 	@Override
-	public void passDataToFragment(ArrayList<Strafe> offeneStrafen) {
+	public void passDataToFragment(ArrayList<Vergehen> offeneStrafen) {
 		// Von der Activity übergebene Daten in die ListView einfügen
 		this.offeneStrafen = offeneStrafen;
-		ListAdapter adapter = new ArrayAdapter<Strafe>(getActivity()
+		ListAdapter adapter = new ArrayAdapter<Vergehen>(getActivity()
 				.getApplicationContext(), R.layout.simplerow, offeneStrafen);
 
 		lVOffeneStrafen.setAdapter(adapter);

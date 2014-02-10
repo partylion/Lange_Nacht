@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Messenger;
 import de.htwg.lange_nacht.data.Spieler;
 import de.htwg.lange_nacht.data.Strafe;
+import de.htwg.lange_nacht.data.Vergehen;
 
 public interface IStrafenverwaltung {
 
@@ -138,9 +139,22 @@ public interface IStrafenverwaltung {
 	 * Ruft eine PHP-Datei auf, die der Strafe das aktuelle Datum als
 	 * Bezahldatum übergibt
 	 * 
-	 * @param strafe
+	 * @param messenger Der Messenger über den Daten zurück zu Activity
+	 * gesendet werden
+	 * 
+	 * @param vergehen
 	 *            Die Strafe die bezahlt wurde
 	 */
-	public void setBezahlt(Messenger messenger, Strafe strafe, String vorname,
-			String nachname);
+	public void setBezahlt(Messenger messenger, Vergehen vergehen);
+
+	/**
+	 * Ruft einen AsyncTask auf, der alle offene Strafen vom Server holt
+	 * 
+	 * @param context
+	 *            Die Activity, welche die Methode aufruft
+	 * @param messenger
+	 *            Der Messenger über den Daten zurück zu Activity gesendet
+	 *            werden
+	 */
+	public void getAllOffeneStrafen(Context context, Messenger messenger);
 }

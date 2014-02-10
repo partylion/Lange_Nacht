@@ -4,17 +4,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
@@ -31,23 +26,19 @@ import android.util.Log;
 import de.htwg.lange_nacht.data.Messages;
 import de.htwg.lange_nacht.data.Vergehen;
 
-public class AsyncTaskBezahlteStrafenFor extends AsyncTask<Void, Void, Void> {
+public class AsyncTaskAlleOffenenStrafen extends AsyncTask<Void, Void, Void> {
 
 	private Context context;
 	private Messenger messenger;
-	private String vorname;
-	private String nachname;
 
 	private ProgressDialog progressDialog;
-	private ArrayList<Vergehen> vergehen;
+	private ArrayList<Vergehen> offeneStrafen;
 
 	private String TAG = this.getClass().getSimpleName();
 
-	public AsyncTaskBezahlteStrafenFor(Context context, Messenger messenger, String vorname, String nachname) {
+	public AsyncTaskAlleOffenenStrafen(Context context, Messenger messenger) {
 		this.context = context;
 		this.messenger = messenger;
-		this.vorname = vorname;
-		this.nachname = nachname;
 	}
 
 	protected void onPreExecute() {
@@ -58,7 +49,7 @@ public class AsyncTaskBezahlteStrafenFor extends AsyncTask<Void, Void, Void> {
 
 	@Override
 	protected Void doInBackground(Void... arg0) {
-		getAllStrafen();
+		getAllOffeneStrafen();
 		return null;
 	}
 
@@ -67,8 +58,9 @@ public class AsyncTaskBezahlteStrafenFor extends AsyncTask<Void, Void, Void> {
 		progressDialog.dismiss();
 		Message msg = Message.obtain();
 		msg.arg1 = Activity.RESULT_OK;
-		msg.arg2 = Messages.GET_BEZAHLTE_STRAFEN_FOR;
-		msg.obj = vergehen;
+		msg.arg2 = Messages.GET_ALLE_OFFENEN_STRAFEN;
+		msg.obj = offeneStrafen;
+		// msg.obj = offeneStrafen;
 		try {
 			messenger.send(msg);
 		} catch (android.os.RemoteException e1) {
@@ -76,11 +68,11 @@ public class AsyncTaskBezahlteStrafenFor extends AsyncTask<Void, Void, Void> {
 		}
 	}
 
-	private void getAllStrafen() {
-		vergehen = new ArrayList<Vergehen>();
+	private void getAllOffeneStrafen() {
+		offeneStrafen = new ArrayList<Vergehen>();
 		// Adresse zu PHP-Datei
-		String url = Strafenverwaltung.SERVER_IP+"/langenacht/getBezahlteStrafenFor.php?";
-		
+		String url = Strafenverwaltung.SERVER_IP
+				+ "/langenacht/getAllOffeneStrafen.php";
 		HttpClient httpclient = new DefaultHttpClient();
 		// Timeout setzen, falls Server nicht erreichbar ist
 		int timeout = 5; // seconds
@@ -89,13 +81,6 @@ public class AsyncTaskBezahlteStrafenFor extends AsyncTask<Void, Void, Void> {
 				timeout * 1000);
 		httpParams
 				.setParameter(CoreConnectionPNames.SO_TIMEOUT, timeout * 1000);
-		
-		List<NameValuePair> parameter = new LinkedList<NameValuePair>();
-		parameter.add(new BasicNameValuePair("vorname", vorname));
-		parameter.add(new BasicNameValuePair("nachname", nachname));
-
-		String paramString = URLEncodedUtils.format(parameter, "utf-8");
-		url += paramString;
 
 		// PHP-Datei aufrufen
 		HttpGet httpget = new HttpGet(url);
@@ -122,19 +107,21 @@ public class AsyncTaskBezahlteStrafenFor extends AsyncTask<Void, Void, Void> {
 						data += line;
 					}
 					jsonArray = new JSONArray(data);
-
 					// Aus dem JSONArray die Strafen auslesen und als Arraylist
 					// von Strafen-Objekten speichern
 					for (int i = 0; i < jsonArray.length(); i++) {
 						JSONObject row = jsonArray.getJSONObject(i);
-						vergehen.add(new Vergehen(row.getString("beschreibung"),
-								Integer.parseInt(row.getString("preis")),
-								Integer.parseInt(row.getString("strafenID")),
-								row.getString("vorname"), row
-										.getString("nachname"), Integer
-										.parseInt(row.getString("spielerID")),
-								row.getString("datum")));
+
+						offeneStrafen.add(new Vergehen(row
+								.getString("beschreibung"), Integer
+								.parseInt(row.getString("preis")), Integer
+								.parseInt(row.getString("strafenID")), row
+								.getString("vorname"), row
+								.getString("nachname"), Integer.parseInt(row
+								.getString("spielerID")), row
+								.getString("datum")));
 					}
+
 				} catch (IllegalStateException e) {
 					e.printStackTrace();
 				} catch (IOException e) {
@@ -146,7 +133,7 @@ public class AsyncTaskBezahlteStrafenFor extends AsyncTask<Void, Void, Void> {
 		}
 		// Wenn es einen Timeout gab
 		else {
-			vergehen = null;
+			offeneStrafen = null;
 			Log.d(TAG, "Daten konnten nicht geladen werden");
 		}
 	}

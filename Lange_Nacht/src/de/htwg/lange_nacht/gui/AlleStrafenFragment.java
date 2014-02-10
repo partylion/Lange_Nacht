@@ -13,7 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import de.htwg.lange_nacht.R;
-import de.htwg.lange_nacht.data.Strafe;
+import de.htwg.lange_nacht.data.Vergehen;
 import de.htwg.lange_nacht.gui.SpielerUebersicht.AlleStrafenFragmentCommunicator;
 
 public class AlleStrafenFragment extends Fragment implements
@@ -43,9 +43,9 @@ public class AlleStrafenFragment extends Fragment implements
 	}
 
 	@Override
-	public void passDataToFragment(ArrayList<Strafe> alleStrafen) {
+	public void passDataToFragment(ArrayList<Vergehen> alleStrafen) {
 		// Von der Activity übergebene Daten in die ListView einfügen
-		ListAdapter adapter = new ArrayAdapter<Strafe>(getActivity()
+		ListAdapter adapter = new ArrayAdapter<Vergehen>(getActivity()
 				.getApplicationContext(), R.layout.simplerow, alleStrafen);
 
 		lVAlleStrafen.setAdapter(adapter);

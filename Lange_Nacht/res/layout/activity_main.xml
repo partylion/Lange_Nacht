@@ -14,17 +14,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/btnSpielerAuswaehlen"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:text="@string/strafe_anlegen" />
-
-    <Button
-        android:id="@+id/btnStrafeEintragen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
-        android:text="@string/strafe_eintragen" />
 
     <Button
         android:id="@+id/btnSpielerAuswaehlen"
@@ -32,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/btnStrafeEintragen"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:text="@string/spieler_auswaehlen" />
 
     <Button
@@ -41,7 +32,25 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/btnStrafeAnlegen"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:text="@string/spieler_anlegen" />
+
+    <Button
+        android:id="@+id/btnOffeneStrafen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnSpielerAnlegen"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:text="@string/alle_offenen_strafen" />
+
+    <Button
+        android:id="@+id/btnStrafeEintragen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:text="@string/strafe_eintragen" />
 
 </RelativeLayout>

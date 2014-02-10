@@ -24,16 +24,17 @@ public class StrafeAnlegenActivity extends Activity {
 	private EditText editTextPreis;
 	private Strafenverwaltung strafenverwaltunginstanz = Strafenverwaltung
 			.getInstance();
-	
+
 	@SuppressLint("HandlerLeak")
 	private Handler handler = new Handler() {
 		public void handleMessage(Message message) {
-			if (message.arg1 == RESULT_OK && message.arg2 == Messages.SET_STRAFE) {
-				Toast.makeText(StrafeAnlegenActivity.this, "Strafe angelegt", Toast.LENGTH_LONG).show();
-			} 
-			else {
-				Toast.makeText(StrafeAnlegenActivity.this,
-						"Upload failed.", Toast.LENGTH_LONG).show();
+			if (message.arg1 == RESULT_OK
+					&& message.arg2 == Messages.SET_STRAFE) {
+				Toast.makeText(StrafeAnlegenActivity.this, "Strafe angelegt",
+						Toast.LENGTH_LONG).show();
+			} else {
+				Toast.makeText(StrafeAnlegenActivity.this, "Upload failed.",
+						Toast.LENGTH_LONG).show();
 			}
 		};
 	};
@@ -56,11 +57,18 @@ public class StrafeAnlegenActivity extends Activity {
 						.trim();
 				String preis = editTextPreis.getText().toString().trim();
 
-				strafenverwaltunginstanz.strafeAnlegen(new Messenger(handler), beschreibung, preis);
+				if (!(beschreibung.equals("")) && !(preis.equals(""))) {
 
-				Intent geheZuMain = new Intent(StrafeAnlegenActivity.this,
-						MainActivity.class);
-				startActivity(geheZuMain);
+					strafenverwaltunginstanz.strafeAnlegen(new Messenger(
+							handler), beschreibung, preis);
+
+					Intent geheZuMain = new Intent(StrafeAnlegenActivity.this,
+							MainActivity.class);
+					startActivity(geheZuMain);
+				} else {
+					Toast.makeText(StrafeAnlegenActivity.this, "Bitte alle Felder ausfüllen",
+							Toast.LENGTH_LONG).show();
+				}
 			}
 		});
 	}

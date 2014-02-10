@@ -29,7 +29,7 @@ import android.os.Message;
 import android.os.Messenger;
 import android.util.Log;
 import de.htwg.lange_nacht.data.Messages;
-import de.htwg.lange_nacht.data.Strafe;
+import de.htwg.lange_nacht.data.Vergehen;
 
 public class AsyncTaskOffeneStrafenFor extends AsyncTask<Void, Void, Void> {
 
@@ -39,11 +39,12 @@ public class AsyncTaskOffeneStrafenFor extends AsyncTask<Void, Void, Void> {
 	private String nachname;
 
 	private ProgressDialog progressDialog;
-	private ArrayList<Strafe> strafen;
+	private ArrayList<Vergehen> vergehen;
 
 	private String TAG = this.getClass().getSimpleName();
 
-	public AsyncTaskOffeneStrafenFor(Context context, Messenger messenger, String vorname, String nachname) {
+	public AsyncTaskOffeneStrafenFor(Context context, Messenger messenger,
+			String vorname, String nachname) {
 		this.context = context;
 		this.messenger = messenger;
 		this.vorname = vorname;
@@ -68,7 +69,7 @@ public class AsyncTaskOffeneStrafenFor extends AsyncTask<Void, Void, Void> {
 		Message msg = Message.obtain();
 		msg.arg1 = Activity.RESULT_OK;
 		msg.arg2 = Messages.GET_OFFENE_STRAFEN_FOR;
-		msg.obj = strafen;
+		msg.obj = vergehen;
 		try {
 			messenger.send(msg);
 		} catch (android.os.RemoteException e1) {
@@ -77,13 +78,11 @@ public class AsyncTaskOffeneStrafenFor extends AsyncTask<Void, Void, Void> {
 	}
 
 	private void getAllStrafen() {
-		strafen = new ArrayList<Strafe>();
+		vergehen = new ArrayList<Vergehen>();
 		// Adresse zu PHP-Datei
-		// Zuhause
-		String url = "http://37.49.36.97/langenacht/getOffeneStrafenFor.php?";
-		//Konstanz
-//		String url = "http://95.208.211.117/langenacht/getAllStrafenFor.php?";
-		
+		String url = Strafenverwaltung.SERVER_IP
+				+ "/langenacht/getOffeneStrafenFor.php?";
+
 		HttpClient httpclient = new DefaultHttpClient();
 		// Timeout setzen, falls Server nicht erreichbar ist
 		int timeout = 5; // seconds
@@ -92,15 +91,13 @@ public class AsyncTaskOffeneStrafenFor extends AsyncTask<Void, Void, Void> {
 				timeout * 1000);
 		httpParams
 				.setParameter(CoreConnectionPNames.SO_TIMEOUT, timeout * 1000);
-		
+
 		List<NameValuePair> parameter = new LinkedList<NameValuePair>();
 		parameter.add(new BasicNameValuePair("vorname", vorname));
 		parameter.add(new BasicNameValuePair("nachname", nachname));
 
 		String paramString = URLEncodedUtils.format(parameter, "utf-8");
 		url += paramString;
-		
-		System.out.println(url);
 
 		// PHP-Datei aufrufen
 		HttpGet httpget = new HttpGet(url);
@@ -117,7 +114,6 @@ public class AsyncTaskOffeneStrafenFor extends AsyncTask<Void, Void, Void> {
 			String data = "";
 			StatusLine statusLine = response.getStatusLine();
 			int statusCode = statusLine.getStatusCode();
-			System.out.println(statusCode);
 			if (statusCode == 200) {
 				try {
 					BufferedReader br = new BufferedReader(
@@ -127,15 +123,22 @@ public class AsyncTaskOffeneStrafenFor extends AsyncTask<Void, Void, Void> {
 					while ((line = br.readLine()) != null) {
 						data += line;
 					}
+					System.out.println(data);
+
 					jsonArray = new JSONArray(data);
 
-					// Aus dem JSONArray die Strafen auslesen und als Arraylist
-					// von Strafen-Objekten speichern
+					// Aus dem JSONArray die Strafen auslesen und als
+					// Arraylist
+					// von Vergehen-Objekten speichern
 					for (int i = 0; i < jsonArray.length(); i++) {
 						JSONObject row = jsonArray.getJSONObject(i);
-						strafen.add(new Strafe(row.getString("strafenID"), row
-								.getString("beschreibung"), Integer
-								.parseInt(row.getString("preis"))));
+						vergehen.add(new Vergehen(row.getString("beschreibung"),
+								Integer.parseInt(row.getString("preis")),
+								Integer.parseInt(row.getString("strafenID")),
+								row.getString("vorname"), row
+										.getString("nachname"), Integer
+										.parseInt(row.getString("spielerID")),
+								row.getString("datum")));
 					}
 
 				} catch (IllegalStateException e) {
@@ -149,7 +152,7 @@ public class AsyncTaskOffeneStrafenFor extends AsyncTask<Void, Void, Void> {
 		}
 		// Wenn es einen Timeout gab
 		else {
-			strafen = null;
+			vergehen = null;
 			Log.d(TAG, "Daten konnten nicht geladen werden");
 		}
 	}

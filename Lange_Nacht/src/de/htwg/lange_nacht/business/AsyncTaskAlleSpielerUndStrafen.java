@@ -78,10 +78,7 @@ public class AsyncTaskAlleSpielerUndStrafen extends AsyncTask<Void, Void, Void> 
 	private void getAllSpieler() {
 		spieler = new ArrayList<Spieler>();
 		// Adresse zu PHP-Datei
-		//Zuhause
-		String url = "http://37.49.36.97/langenacht/getAllSpieler.php";
-		//Konstanz
-//		String url = "http://95.208.211.117/langenacht/getAllSpieler.php";
+		String url = Strafenverwaltung.SERVER_IP+"/langenacht/getAllSpieler.php";
 		
 		HttpClient httpclient = new DefaultHttpClient();
 		// Timeout setzen, falls Server nicht erreichbar ist
@@ -107,7 +104,6 @@ public class AsyncTaskAlleSpielerUndStrafen extends AsyncTask<Void, Void, Void> 
 			String data = "";
 			StatusLine statusLine = response.getStatusLine();
 			int statusCode = statusLine.getStatusCode();
-			System.out.println(statusCode);
 			if (statusCode == 200) {
 				try {
 					BufferedReader br = new BufferedReader(
@@ -147,7 +143,7 @@ public class AsyncTaskAlleSpielerUndStrafen extends AsyncTask<Void, Void, Void> 
 	public void getAllStrafen() {
 		strafen = new ArrayList<Strafe>();
 		// Adresse zu PHP-Datei
-		String url = "http://37.49.36.97/langenacht/getAllStrafen.php";
+		String url = Strafenverwaltung.SERVER_IP+"/langenacht/getAllStrafen.php";
 		HttpClient httpclient = new DefaultHttpClient();
 
 		// Timeout setzen, falls Server nicht erreichbar ist

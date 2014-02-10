@@ -2,6 +2,7 @@ package de.htwg.lange_nacht.business;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,45 +18,41 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.HttpParams;
 
-import de.htwg.lange_nacht.data.Messages;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Message;
 import android.os.Messenger;
 import android.util.Log;
+import de.htwg.lange_nacht.data.Messages;
+import de.htwg.lange_nacht.data.Vergehen;
 
 public class AsyncTaskStrafeBezahlt extends AsyncTask<Void, Void, Void> {
 
 	private Messenger messenger;
 	private Date datum;
-	private String vorname, nachname;
-	private String strafenID;
+	private Vergehen vergehen;
 	private HttpResponse response;
 
-	public AsyncTaskStrafeBezahlt(Messenger messenger, String vorname,
-			String nachname, String strafenID) {
+	public AsyncTaskStrafeBezahlt(Messenger messenger, Vergehen vergehen) {
 		this.messenger = messenger;
-		this.vorname = vorname;
-		this.nachname = nachname;
-		this.strafenID = strafenID;
+		this.vergehen = vergehen;
 	}
 
 	@Override
 	protected Void doInBackground(Void... params) {
 		// URL zusammenbauen
-		// Zuhause
-		String url = "http://37.49.36.97/langenacht/updateVergehen.php?";
-		// Konstanz
-//		String url = "http://95.208.211.117/langenacht/updateVergehen.php?";
+		String url = Strafenverwaltung.SERVER_IP
+				+ "/langenacht/updateVergehen.php?";
 		List<NameValuePair> parameter = new LinkedList<NameValuePair>();
-		parameter.add(new BasicNameValuePair("strafenID", strafenID));
-		parameter.add(new BasicNameValuePair("vorname", vorname));
-		parameter.add(new BasicNameValuePair("nachname", nachname));
-
+		parameter.add(new BasicNameValuePair("strafenID", vergehen
+				.getStrafenId() + ""));
+		parameter.add(new BasicNameValuePair("spielerID", vergehen
+				.getSpielerId() + ""));
+		parameter.add(new BasicNameValuePair("datum", vergehen.getDatum()));
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 		datum = new Date();
 
-		parameter.add(new BasicNameValuePair("datum", sdf.format(datum)));
+		parameter.add(new BasicNameValuePair("bezahlt", sdf.format(datum)));
 
 		String paramString = URLEncodedUtils.format(parameter, "utf-8");
 		url += paramString;

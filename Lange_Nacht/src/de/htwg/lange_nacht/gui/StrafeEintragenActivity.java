@@ -39,7 +39,7 @@ public class StrafeEintragenActivity extends FragmentActivity {
 			.getInstance();
 	private Button btnStrafeEintragenSubmit;
 	private Button btnDatumwaehlen;
-	private int selectedYear, selectedMonth, selectedDay;
+	private int selectedYear = 0, selectedMonth = 0, selectedDay = 0;
 	static final int DATE_DIALOG_ID = 0;
 
 	private ArrayAdapter<String> adapterSpieler;
@@ -50,7 +50,8 @@ public class StrafeEintragenActivity extends FragmentActivity {
 	private Handler handler = new Handler() {
 		public void handleMessage(Message message) {
 			Object list = message.obj;
-			if (message.arg1 == RESULT_OK && list != null && message.arg2 == Messages.GET_SPIELER) {
+			if (message.arg1 == RESULT_OK && list != null
+					&& message.arg2 == Messages.GET_SPIELER) {
 				ArrayList<Spieler> alleSpieler = (ArrayList<Spieler>) list;
 				adapterSpieler.clear();
 				spielerListe = new Spieler[alleSpieler.size()];
@@ -70,8 +71,8 @@ public class StrafeEintragenActivity extends FragmentActivity {
 					adapterStrafen.add(alleStrafen.get(i).getBeschreibung());
 				}
 				adapterStrafen.notifyDataSetChanged();
-			}
-			else if (message.arg1 == RESULT_OK && message.arg2 == Messages.SET_VERGEHEN) {
+			} else if (message.arg1 == RESULT_OK
+					&& message.arg2 == Messages.SET_VERGEHEN) {
 				Toast.makeText(StrafeEintragenActivity.this,
 						"Eintrag erfolgreich", Toast.LENGTH_LONG).show();
 			}
@@ -95,7 +96,8 @@ public class StrafeEintragenActivity extends FragmentActivity {
 		btnStrafeEintragenSubmit = (Button) findViewById(R.id.btnStrafeEintragenSubmit);
 		btnDatumwaehlen = (Button) findViewById(R.id.btnDatumwaehlen);
 
-		strafenverwaltungsinstanz.getAllSpielerAndStrafen(this, new Messenger(handler));
+		strafenverwaltungsinstanz.getAllSpielerAndStrafen(this, new Messenger(
+				handler));
 
 		// Die beiden Spinner mit den Daten befüllen
 		// Specify the layout to use when the list of choices appears
@@ -136,7 +138,6 @@ public class StrafeEintragenActivity extends FragmentActivity {
 
 			@Override
 			public void onNothingSelected(AdapterView<?> parentView) {
-				// your code here
 			}
 
 		});
@@ -170,15 +171,22 @@ public class StrafeEintragenActivity extends FragmentActivity {
 					}
 				}
 
-				// Funktion der Strafenverwaltung aufrufen, die das Vergehen
-				// abspeichert
-				strafenverwaltungsinstanz.vergehenAnlegen(new Messenger(handler), spieler, strafe,
-						selectedYear + "-" + selectedMonth + "-" + selectedDay);
+				if (spieler != null && strafe != null && selectedDay != 0
+						&& selectedMonth != 0 && selectedYear != 0) {
+					// Funktion der Strafenverwaltung aufrufen, die das Vergehen
+					// abspeichert
+					strafenverwaltungsinstanz.vergehenAnlegen(new Messenger(
+							handler), spieler, strafe, selectedYear + "-"
+							+ selectedMonth + "-" + selectedDay);
 
-				// Zur MainActivity wechseln
-				Intent geheZuMain = new Intent(StrafeEintragenActivity.this,
-						MainActivity.class);
-				startActivity(geheZuMain);
+					// Zur MainActivity wechseln
+					Intent geheZuMain = new Intent(
+							StrafeEintragenActivity.this, MainActivity.class);
+					startActivity(geheZuMain);
+				} else {
+					Toast.makeText(StrafeEintragenActivity.this, "Bitte alle Felder ausfüllen",
+							Toast.LENGTH_LONG).show();
+				}
 			}
 		});
 
