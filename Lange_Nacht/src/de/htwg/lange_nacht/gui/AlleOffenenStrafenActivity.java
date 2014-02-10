@@ -34,9 +34,6 @@ public class AlleOffenenStrafenActivity extends Activity {
 			if (message.arg1 == RESULT_OK && list != null
 					&& message.arg2 == Messages.GET_ALLE_OFFENEN_STRAFEN) {
 				offeneStrafen = (ArrayList<Vergehen>) list;
-//				 ListAdapter adapter = new ArrayAdapter<Vergehen>(
-//				 getApplicationContext(), R.layout.simplerow,
-//				 offeneStrafen);
 				adapter = new VergehenAdapter(
 						AlleOffenenStrafenActivity.this, R.layout.simplerow,
 						offeneStrafen);

@@ -75,8 +75,6 @@ public class SpielerAuswaehlenActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-
-				// TODO eventuell Spieler Objekt übergeben
 				String spieler = (String) spinnerSpielerAuswaehlen
 						.getSelectedItem();
 				Intent geheZuSpielerUebersicht = new Intent(

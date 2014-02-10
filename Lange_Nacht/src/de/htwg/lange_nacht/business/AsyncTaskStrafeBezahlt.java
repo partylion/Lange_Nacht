@@ -2,7 +2,6 @@ package de.htwg.lange_nacht.business;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;

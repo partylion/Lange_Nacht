@@ -9,8 +9,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import de.htwg.lange_nacht.R;
 import de.htwg.lange_nacht.data.Vergehen;
@@ -45,24 +43,13 @@ public class AlleStrafenFragment extends Fragment implements
 	@Override
 	public void passDataToFragment(ArrayList<Vergehen> alleStrafen) {
 		// Von der Activity übergebene Daten in die ListView einfügen
-//		ListAdapter adapter = new ArrayAdapter<Vergehen>(getActivity()
-//				.getApplicationContext(), R.layout.simplerow, alleStrafen);
-
 		VergehenAdapter adapter = new VergehenAdapter(
 				getActivity().getApplicationContext(), R.layout.simplerow,
 				alleStrafen);
 		
 		lVAlleStrafen.setAdapter(adapter);
 		lVAlleStrafen.setChoiceMode(ListView.CHOICE_MODE_NONE);
-		
-		lVAlleStrafen.setOnItemClickListener(new OnItemClickListener() {
 
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1,
-					int arg2, long arg3) {
-				arg1.setSelected(true);						
-			}
-		});
 	}
 
 	@Override
