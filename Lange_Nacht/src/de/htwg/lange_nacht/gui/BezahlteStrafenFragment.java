@@ -9,8 +9,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import de.htwg.lange_nacht.R;
 import de.htwg.lange_nacht.data.Vergehen;
@@ -46,11 +46,24 @@ public class BezahlteStrafenFragment extends Fragment implements
 	@Override
 	public void passDataToFragment(ArrayList<Vergehen> bezahlteStrafen) {
 		// Von der Activity übergebene Daten in die ListView einfügen
-		ListAdapter adapter = new ArrayAdapter<Vergehen>(getActivity()
-				.getApplicationContext(), R.layout.simplerow, bezahlteStrafen);
+//		ListAdapter adapter = new ArrayAdapter<Vergehen>(getActivity()
+//				.getApplicationContext(), R.layout.simplerow, bezahlteStrafen);
+		
+		VergehenAdapter adapter = new VergehenAdapter(
+				getActivity().getApplicationContext(), R.layout.simplerow,
+				bezahlteStrafen);
 
 		lVBezahlteStrafen.setAdapter(adapter);
-		lVBezahlteStrafen.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+		lVBezahlteStrafen.setChoiceMode(ListView.CHOICE_MODE_NONE);
+		
+		lVBezahlteStrafen.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				arg1.setSelected(true);						
+			}
+		});
 	}
 
 	@Override

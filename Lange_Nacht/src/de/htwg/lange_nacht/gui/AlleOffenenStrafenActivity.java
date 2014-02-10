@@ -9,9 +9,9 @@ import android.os.Message;
 import android.os.Messenger;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 import de.htwg.lange_nacht.R;
@@ -26,6 +26,7 @@ public class AlleOffenenStrafenActivity extends Activity {
 	private Button btnBezahlt;
 	private Strafenverwaltung strafenverwaltungsinstanz = Strafenverwaltung
 			.getInstance();
+	private VergehenAdapter adapter;
 
 	private Handler handler = new Handler() {
 		public void handleMessage(Message message) {
@@ -33,11 +34,24 @@ public class AlleOffenenStrafenActivity extends Activity {
 			if (message.arg1 == RESULT_OK && list != null
 					&& message.arg2 == Messages.GET_ALLE_OFFENEN_STRAFEN) {
 				offeneStrafen = (ArrayList<Vergehen>) list;
-				ListAdapter adapter = new ArrayAdapter<Vergehen>(
-						getApplicationContext(), R.layout.simplerow,
+//				 ListAdapter adapter = new ArrayAdapter<Vergehen>(
+//				 getApplicationContext(), R.layout.simplerow,
+//				 offeneStrafen);
+				adapter = new VergehenAdapter(
+						AlleOffenenStrafenActivity.this, R.layout.simplerow,
 						offeneStrafen);
 				lvOffeneStrafen.setAdapter(adapter);
 				lvOffeneStrafen.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+				
+				lvOffeneStrafen.setOnItemClickListener(new OnItemClickListener() {
+
+					@Override
+					public void onItemClick(AdapterView<?> arg0, View arg1,
+							int arg2, long arg3) {
+						arg1.setSelected(true);						
+					}
+				});
+
 			} else if (message.arg1 == android.app.Activity.RESULT_OK
 					&& message.arg2 == Messages.UPDATE_STRAFE) {
 				Toast.makeText(AlleOffenenStrafenActivity.this,

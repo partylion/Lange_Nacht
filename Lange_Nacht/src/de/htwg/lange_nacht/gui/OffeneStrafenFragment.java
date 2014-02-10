@@ -14,11 +14,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 import de.htwg.lange_nacht.R;
 import de.htwg.lange_nacht.business.Strafenverwaltung;
 import de.htwg.lange_nacht.data.Messages;
@@ -110,11 +112,20 @@ public class OffeneStrafenFragment extends Fragment implements
 	public void passDataToFragment(ArrayList<Vergehen> offeneStrafen) {
 		// Von der Activity übergebene Daten in die ListView einfügen
 		this.offeneStrafen = offeneStrafen;
-		ListAdapter adapter = new ArrayAdapter<Vergehen>(getActivity()
-				.getApplicationContext(), R.layout.simplerow, offeneStrafen);
-
+		VergehenAdapter adapter = new VergehenAdapter(
+				getActivity().getApplicationContext(), R.layout.simplerow,
+				offeneStrafen);
 		lVOffeneStrafen.setAdapter(adapter);
 		lVOffeneStrafen.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+		
+		lVOffeneStrafen.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				arg1.setSelected(true);						
+			}
+		});
 	}
 
 	@Override
