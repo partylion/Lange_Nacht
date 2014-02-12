@@ -60,7 +60,6 @@ public class AsyncTaskAlleOffenenStrafen extends AsyncTask<Void, Void, Void> {
 		msg.arg1 = Activity.RESULT_OK;
 		msg.arg2 = Messages.GET_ALLE_OFFENEN_STRAFEN;
 		msg.obj = offeneStrafen;
-		// msg.obj = offeneStrafen;
 		try {
 			messenger.send(msg);
 		} catch (android.os.RemoteException e1) {
